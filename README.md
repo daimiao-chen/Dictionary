@@ -6,6 +6,7 @@ An English-English Dictionary Application that can let users check vocabulary's 
 
 - Daimiao Chen (1172321)
 - Nonye Asogwa (1176041)
+- Oleg Baryshev (1138630)
 
 ## Features
 
