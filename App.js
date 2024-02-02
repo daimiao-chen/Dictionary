@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { Card, Portal, Button, Modal, PaperProvider } from 'react-native-paper';
 import * as wordDB from './src/utils/word';
+import { WordCard } from './src/components/wordCard/wordCard';
 
 export default function App() {
+  const [displayWord, setDisplayWord] = useState(false);
   const [testDefinition, setTestDefinition] = useState('');
 
   const searchForWord = (word) => {
@@ -15,12 +18,16 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>{testDefinition}</Text>
-
-      <Button title="Search" onPress={() => searchForWord('abandon')} />
-      <StatusBar style="auto" />
-    </View>
+    <PaperProvider>
+      <View style={styles.container}>
+        <Button mode="contained" onPress={() => setDisplayWord(true) }> Search </Button>
+        <Portal>
+            <Modal visible={displayWord} onDismiss={() => setDisplayWord(false)}>
+              <WordCard word="abandon" />
+            </Modal>
+        </Portal>
+      </View>
+    </PaperProvider>
   );
 }
 
