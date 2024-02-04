@@ -143,10 +143,15 @@ export const registerFavouriteListener = (callback) => {
 
 export const addFavourite = (word) => {
   /* add word into favourite list */
-  executeSql('INSERT INTO word_list (word) VALUES (?)', [word])
-
-  /* call pushFavouriteChangeed */
-  pushFavouriteChangeed();
+  return executeSql('INSERT INTO word_list (word) VALUES (?)', [word])
+    .then(() => {
+      /* call pushFavouriteChangeed */
+      pushFavouriteChangeed();
+    })
+    .catch(error => {
+      console.error('Error adding word to favourites:', error);
+      throw error;
+    });
 }
 
 export const deleteFavourite = (word) => {
