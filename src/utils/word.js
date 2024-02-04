@@ -118,28 +118,43 @@ const genWordObjsFromDatabase = (databaseResults) => {
   return subDict;
 }
 
+let favouriteListeners = [];
+
 const pushFavouriteChangeed = () => {
+  executeSql('SELECT * FROM word_list', [])
+    .then(results => {
+      for (x of favouriteListeners) {
+        x(results.rows._array);
+      }
+    });
+
+
 }
 
 /* Don't call addFavourite and deleteFavourite in callback */
 export const registerFavouriteListener = (callback) => {
   /* register callback into the list */
+  favouriteListeners.push(callback);
 
   /* call pushFavouriteChangeed onece */
+  pushFavouriteChangeed();
 
 }
 
 export const addFavourite = (word) => {
   /* add word into favourite list */
-  console.log(word);
+  executeSql('INSERT INTO word_list (word) VALUES (?)', [word])
 
   /* call pushFavouriteChangeed */
+  pushFavouriteChangeed();
 }
 
 export const deleteFavourite = (word) => {
   /* delete word from favourite list */
+  executeSql('DELETE FROM word_list WHERE word = ?', [word])
 
   /* call pushFavouriteChangeed */
+  pushFavouriteChangeed();
 }
 
 export const MAX_WORD_INDEX = 176023

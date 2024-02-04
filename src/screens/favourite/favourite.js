@@ -4,6 +4,16 @@ import { Button } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
 
 export const Favourite = () => {
+  const [favouriteList, setFavouriteList] = React.useState(null);
+
+  const favouriteListener = (results) => {
+    console.log(results);
+    setFavouriteList(results);
+  }
+
+  React.useEffect(() => {
+    wordDB.registerFavouriteListener(favouriteListener);
+  }, []);
 
 
   const buttonListener = () => {
