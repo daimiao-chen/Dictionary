@@ -57,7 +57,7 @@ async function initializeDatabase()
       []
     );
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
   for (x of initializedCallback) {
@@ -81,6 +81,14 @@ export const checkInitialized = () => {
 export const searchWord = (word) => {
   return executeSql('SELECT * FROM entries WHERE word = ?', [word])
     .then(results => genWordObjsFromDatabase(results));
+}
+
+export const pickRandomWord = () => {
+    let index = Math.floor(Math.random() * (MAX_WORD_INDEX + 1));
+    return executeSql('SELECT * FROM entries WHERE id = ?', [index])
+      .then(results => {
+        return results.rows._array[0];
+      });
 }
 
 const genWordObjsFromDatabase = (databaseResults) => {
@@ -113,6 +121,7 @@ export const registerFavouriteListener = (callback) => {
 
 export const addFavourite = (word) => {
   /* add word into favourite list */
+  console.log(word);
 
   /* call pushFavouriteChangeed */
 }
@@ -122,4 +131,6 @@ export const deleteFavourite = (word) => {
 
   /* call pushFavouriteChangeed */
 }
+
+export const MAX_WORD_INDEX = 176023
 
