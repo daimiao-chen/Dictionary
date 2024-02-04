@@ -33,12 +33,16 @@ const executeSql = (sql, params) => {
 async function initializeDatabase()
 {
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    console.log('making directory');
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+    await FileSystem.downloadAsync(
+      Asset.fromModule(require('../../assets/Dictionary.db')).uri,
+      FileSystem.documentDirectory + 'SQLite/Dictionary.db'
+    );
+  } else {
+    console.log('directory exists');
   }
-  await FileSystem.downloadAsync(
-    Asset.fromModule(require('../../assets/Dictionary.db')).uri,
-    FileSystem.documentDirectory + 'SQLite/Dictionary.db'
-  );
+
   let ldb = SQLite.openDatabase('Dictionary.db');
   db = ldb;
 
@@ -63,6 +67,12 @@ async function initializeDatabase()
   for (x of initializedCallback) {
     x();
   }
+}
+
+export const closeDBandDelete = () => {
+  db._db.close();
+  db = null;
+  FileSystem.deleteAsync(FileSystem.documentDirectory + 'SQLite');
 }
 
 initializeDatabase();
