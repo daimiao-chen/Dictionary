@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
 
-const Favourite = () => {
-  const [favouriteList, setFavouriteList] = useState([]);
-
-  const loadFavouriteList = () => {
-    wordDB.registerFavouriteListener(favouriteListener);
-  };
+export const Favourite = () => {
+  const [favouriteList, setFavouriteList] = React.useState([]);
 
   const favouriteListener = (results) => {
+    console.log('Favourite listener', results);
     setFavouriteList(results);
   };
 
-  useEffect(() => {
-    loadFavouriteList();
+  React.useEffect(() => {
+    wordDB.registerFavouriteListener(favouriteListener);
   }, []);
 
   const buttonListener = () => {
     wordDB.pickRandomWord()
-      .then(results => {
-        wordDB.addFavourite(results.word)
-          .then(() => loadFavouriteList());
+      .then(result => {
+        wordDB.addFavourite(result.word);
       });
   };
 
