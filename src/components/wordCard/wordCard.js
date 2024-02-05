@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 
 import * as wordDB from '../../utils/word';
 
@@ -30,4 +31,23 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
+export const WordItem = ({ item }) => {
+  const [visible, setVisible] = React.useState(false);
+  const showModal = () => setVisible(true);
+  
+  return (
+    <View>
+      <Portal>
+        <Modal visible={visible} onDismiss={() => {setVisible(false)}}>
+          <WordCard word={item.word} />
+        </Modal>
+      </Portal>
+
+      <Card onPress={showModal}>
+        <Card.Title title={item.word} subtitle={item.added_date} />
+      </Card>
+    </View>
+  );
+}
 

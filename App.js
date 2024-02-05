@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from './src/screens/home/home';
-import Favourite from './src/screens/favourite/favourite';
+import { Favourite } from './src/screens/favourite/favourite';
 import { Test } from './src/screens/test/test';
 import { Settings } from './src/screens/settings/settings';
 
@@ -20,3 +20,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+

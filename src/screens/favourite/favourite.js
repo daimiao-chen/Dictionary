@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, FlatList } from 'react-native';
+import { Button, Card, Text, PaperProvider } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
+import { WordItem } from '../../components/wordCard/wordCard';
 
 export const Favourite = () => {
   const [favouriteList, setFavouriteList] = React.useState([]);
@@ -13,6 +14,10 @@ export const Favourite = () => {
 
   React.useEffect(() => {
     wordDB.registerFavouriteListener(favouriteListener);
+
+    return () => {
+      wordDB.unregisterFavouriteListener(favouriteListener);
+    };
   }, []);
 
   const buttonListener = () => {
@@ -22,27 +27,16 @@ export const Favourite = () => {
       });
   };
 
-  const renderListItem = ({ item }) => (
-    <View style={{ padding: 10 }}>
-      <Text>{item.word}</Text>
-      <Text>ID: {item.id}</Text>
-      <Text>Learned: {item.learned ? 'Yes' : 'No'}</Text>
-      <Text>Test Times: {item.test_times}</Text>
-      <Text>Last Test Date: {item.last_test_date || 'Not tested yet'}</Text>
-      <Text>Added Date: {item.added_date} (yyyy-mm-dd)</Text>
-    </View>
-  );
-
   return (
-    <View>
+    <PaperProvider>
       <Text>List of my favourite words.</Text>
       <Button onPress={buttonListener}>Random adding(test)</Button>
       <FlatList
         data={favouriteList}
-        renderItem={renderListItem}
+        renderItem={({ item }) => <WordItem item={item} />}
         keyExtractor={(item) => item.id.toString()} 
       />
-    </View>
+    </PaperProvider>
   );
 };
-export default Favourite;
+

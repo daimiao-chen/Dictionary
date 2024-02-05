@@ -141,6 +141,11 @@ export const registerFavouriteListener = (callback) => {
 
 }
 
+export const unregisterFavouriteListener = (callback) => {
+  /* remove callback from the list */
+  favouriteListeners = favouriteListeners.filter(x => x !== callback);
+}
+
 export const addFavourite = (word) => {
   /* add word into favourite list */
   return executeSql('INSERT INTO word_list (word) VALUES (?)', [word])
