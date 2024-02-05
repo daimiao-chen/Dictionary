@@ -104,16 +104,20 @@ export const pickRandomWord = () => {
 const genWordObjsFromDatabase = (databaseResults) => {
   let subDict =  {}
 
-  for (x of databaseResults.rows._array) {
+  /* filter the dummy entries */
+  const definitions = databaseResults.rows._array
+    .filter(x => x.wordtype.length > 0 && x.definition.length > 0)
+
+  for (x of definitions) {
     let word = x.word;
     let definition = { type: x.wordtype, definition: x.definition };
-
-    if (word in subDict) {
-      subDict[word].definitions.push(definition);
+    if (subDict[word] === undefined) {
+      subDict[word] = { definitions: [definition] };
     } else {
-      subDict[word] = { word: word, definitions: [definition] };
+      subDict[word].definitions.push(definition);
     }
   }
+
 
   return subDict;
 }

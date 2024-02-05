@@ -29,7 +29,6 @@ export const Favourite = () => {
 
   return (
     <PaperProvider>
-      <Text>List of my favourite words.</Text>
       <Button onPress={buttonListener}>Random adding(test)</Button>
       <FlatList
         data={favouriteList}

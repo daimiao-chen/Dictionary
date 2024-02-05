@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native';
 import { WordCard } from '../../components/wordCard/wordCard';
 
-export const Home = ({isDark}) => {
+export const Home = () => {
   const [displayWord, setDisplayWord] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
   const handleSearch = () => {
@@ -25,7 +25,7 @@ export const Home = ({isDark}) => {
         <Button mode="contained" onPress={handleSearch}> Search </Button>
         <Portal>
             <Modal visible={displayWord} onDismiss={() => setDisplayWord(false)}>
-              <WordCard word={searchText} isDark={isDark} />
+              <WordCard word={searchText} />
             </Modal>
         </Portal>
       </View>

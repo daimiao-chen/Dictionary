@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 
@@ -6,31 +6,40 @@ import * as wordDB from '../../utils/word';
 
 export const WordCard = ({ word, isDark }) => {
 
-  const [definition, setDefinition] = useState('');
+  const [subDict, setSubDict] = React.useState();
 
-  useEffect(() => {
+  React.useEffect(() => {
     wordDB.searchWord(word).then((results) => {
-      setDefinition(JSON.stringify(results));
+      setSubDict(results);
     }).catch((error) => {
-      setDefinition(JSON.stringify(error));
+      console.error(error);
+      throw error;
     });
   }, [word]);
 
   return (
-    <View style={styles.container} >
-      <Text >{word}</Text>
-      <Text >{definition}</Text>
-    </View>
+    <Card>
+      <Card.Title title={word} />
+      <Card.Content>
+        {subDict && 
+          <FlatList
+            data={subDict[word].definitions}
+            renderItem={({ item }) => {
+              /* replace the \r\n with '' */
+              const definition = item.definition.replace(/\n/g, '');
+              return (
+              <View>
+                <Text>{item.type}</Text>
+                <Text>{definition}</Text>
+              </View>
+            )}}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        }
+      </Card.Content>
+    </Card>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    margin: 20,
-    padding: 10,
-  },
-});
 
 export const WordItem = ({ item }) => {
   const [visible, setVisible] = React.useState(false);
