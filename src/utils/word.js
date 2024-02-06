@@ -165,10 +165,22 @@ export const addFavourite = (word) => {
 
 export const deleteFavourite = (word) => {
   /* delete word from favourite list */
-  executeSql('DELETE FROM word_list WHERE word = ?', [word])
+  return executeSql('DELETE FROM word_list WHERE word = ?', [word])
+    .then(() => {
+      /* call pushFavouriteChangeed */
+      pushFavouriteChangeed();
+    })
+    .catch(error => {
+      console.error('Error deleting word from favourites:', error);
+      throw error;
+    });
+}
 
-  /* call pushFavouriteChangeed */
-  pushFavouriteChangeed();
+export const isFavourite = (word) => {
+  return executeSql('SELECT * FROM word_list WHERE word = ?', [word])
+    .then(results => {
+      return results.rows._array.length > 0;
+    });
 }
 
 export const MAX_WORD_INDEX = 176023
