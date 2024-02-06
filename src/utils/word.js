@@ -107,6 +107,11 @@ const genWordObjsFromDatabase = (databaseResults) => {
   /* filter the dummy entries */
   const definitions = databaseResults.rows._array
     .filter(x => x.wordtype.length > 0 && x.definition.length > 0)
+    .map(x => {
+      /* replace the \r\n with '' */
+      x.definition = x.definition.replace(/\n/g, '');
+      return x;
+    });
 
   for (x of definitions) {
     let word = x.word;

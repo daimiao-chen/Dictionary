@@ -52,15 +52,12 @@ export const WordCard = ({ word, isDark }) => {
         {subDict && 
           <FlatList
             data={subDict[word].definitions}
-            renderItem={({ item }) => {
-              /* replace the \r\n with '' */
-              const definition = item.definition.replace(/\n/g, '');
-              return (
+            renderItem={({ item }) => (
               <View>
                 <Text>{item.type}</Text>
-                <Text>{definition}</Text>
+                <Text>{item.definition}</Text>
               </View>
-            )}}
+            )}
             keyExtractor={(item, index) => index.toString()}
           />
         }
