@@ -1,6 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
+import { Audio } from 'expo-av';
 
 let initializedCallback = [];
 let db = null;
@@ -189,4 +190,37 @@ export const isFavourite = (word) => {
 }
 
 export const MAX_WORD_INDEX = 176023
+
+const URL = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+export const getPhonetic = (word) => {
+  return fetch(URL + word)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(json => {
+      const phoneticsWithAudio = json[0].phonetics.filter(x => x.audio !== undefined && x.audio.length > 0);
+      return phoneticsWithAudio.length > 0 ? phoneticsWithAudio[0] : null;
+    })
+    .then(phonetic => {
+      if (phonetic !== null) {
+        console.log(`${phonetic.text} ${phonetic.audio}`);
+        return Audio.Sound.createAsync({ uri: phonetic.audio })
+          .then((sound) => {
+            console.log("success create sound");
+            phonetic.player = sound
+            return phonetic;
+          })
+      } else {
+        return null;
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching phonetic:', error);
+      throw error;
+    });
+}
+
 

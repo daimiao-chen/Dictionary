@@ -2,13 +2,13 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-
 import * as wordDB from '../../utils/word';
 
 export const WordCard = ({ word, isDark }) => {
 
   const [subDict, setSubDict] = React.useState();
   const [isLiked, setIsLiked] = React.useState(false);
+  const [phonetic, setPhonetic] = React.useState(null);
 
   const heartoOnPress = () => {
     var handle = isLiked ? wordDB.deleteFavourite : wordDB.addFavourite;
@@ -43,12 +43,36 @@ export const WordCard = ({ word, isDark }) => {
       console.error(error);
       throw error;
     });
+    wordDB.getPhonetic(word).then((phonetic) => {
+      setPhonetic(phonetic);
+    }).catch((error) => {
+      console.error(error);
+      //throw error;
+    });
   }, [word]);
 
   return (
     <Card>
       <Card.Title title={word} right={rightButton} />
       <Card.Content>
+        {phonetic && (
+          <View>
+            <Text>{phonetic.text}</Text>
+            <AntDesign name="sound" size={16} color="black" onPress={
+              () => {
+                console.log(phonetic);
+                /* TODO: refactor this workaround */
+                phonetic.player.sound.playAsync().then(() => {
+                  /* repeat play */
+                  phonetic.player.sound.replayAsync().then(() => {
+                    console.log("success replay sound");
+                  });
+              });
+              }
+            }
+            />
+          </View>
+        )}
         {subDict && 
           <FlatList
             data={subDict[word].definitions}
@@ -73,7 +97,7 @@ export const WordItem = ({ item }) => {
   return (
     <View>
       <Portal>
-        <Modal visible={visible} onDismiss={() => {setVisible(false)}}>
+        <Modal visible={visible} onDismiss={() => {setVisible(false)}} style={styles.modal} >
           <WordCard word={item.word} />
         </Modal>
       </Portal>
@@ -88,6 +112,9 @@ export const WordItem = ({ item }) => {
 const styles = StyleSheet.create({
   CardRightButton: {
     marginRight: 32,
+  },
+  modal: {
+    margin: 20,
   },
 });
 
