@@ -4,25 +4,35 @@ import { PaperProvider, Button, Portal, Modal } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { TextInput } from 'react-native';
 import { WordCard } from '../../components/wordCard/wordCard';
+import { AntDesign } from '@expo/vector-icons';
 
 export const Home = () => {
   const [displayWord, setDisplayWord] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
-  const handleSearch = () => {
-    setDisplayWord(true);
+  const search = () => {
+    if (searchText === '') {
+      return;
+    }
+      setDisplayWord(true);
   };
 
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder = "Type here to translate!"
-          value={searchText}
-          onChangeText={text => setSearchText(text)}
+        <View style={styles.searchComponent}>
+          <TextInput
+            style={styles.inputText}
+            placeholder = "Type here to check!"
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+            />
+          <AntDesign
+            name="search1"
+            color= {searchText === '' ? "gray" : "blue"}
+            onPress={search}
+            style={styles.searchButton}
           />
-
-        <Button mode="contained" onPress={handleSearch}> Search </Button>
+        </View>
         <Portal>
             <Modal visible={displayWord} onDismiss={() => setDisplayWord(false)}>
               <WordCard word={searchText} />
@@ -38,13 +48,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  input: {
+  searchComponent: {
+    flexDirection: 'row',
+  },
+  inputText: {
+    flex: 1,
     height: 40,
-    margin: 20,
     borderWidth: 1,
-    padding: 10,
-  }
+    margin: 10,
+  },
+  searchButton: {
+    margin: 10,
+    fontSize: 40,
+  },
+
 });
