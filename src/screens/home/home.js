@@ -13,7 +13,12 @@ export const Home = () => {
     if (searchText === '') {
       return;
     }
-      setDisplayWord(true);
+    /* make first letter capital,
+     * the rest lower case
+     * and remove white spaces */
+    setSearchText(searchText.charAt(0).toUpperCase() 
+      + searchText.slice(1).toLowerCase().trim());
+    setDisplayWord(true);
   };
 
   return (
