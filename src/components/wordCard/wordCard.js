@@ -71,7 +71,7 @@ export const WordCard = ({ word, isDark }) => {
   return (
     <Card>
       <Card.Title title={word} right={rightButton} />
-      <Card.Content>
+      <Card.Content style={styles.cardContext}>
         {phonetic && (
           <View>
             <Text>{phonetic.text}</Text>
@@ -125,6 +125,9 @@ const styles = StyleSheet.create({
   },
   modal: {
     margin: 20,
+  },
+  cardContext: {
+    height: 400,
   },
 });
 
