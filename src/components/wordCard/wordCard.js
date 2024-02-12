@@ -30,19 +30,36 @@ export const WordCard = ({ word, isDark }) => {
     />
   );
 
+  const playPhonetic = () => {
+    if (!phonetic) {
+      console.error("phonetic is not available");
+      return;
+    }
+    /* TODO: refactor this workaround */
+    phonetic.player.sound.playAsync().then(() => {
+      /* repeat play */
+      phonetic.player.sound.replayAsync().then(() => {
+        console.log("success replay sound");
+      });
+    });
+  }
+
   React.useEffect(() => {
+    /* search word */
     wordDB.searchWord(word).then((results) => {
       setSubDict(results);
     }).catch((error) => {
       console.error(error);
       throw error;
     });
+    /* check if word is favourite */
     wordDB.isFavourite(word).then((isFavourite) => {
       setIsLiked(isFavourite);
     }).catch((error) => {
       console.error(error);
       throw error;
     });
+    /* get phonetic */
     wordDB.getPhonetic(word).then((phonetic) => {
       setPhonetic(phonetic);
     }).catch((error) => {
@@ -58,18 +75,11 @@ export const WordCard = ({ word, isDark }) => {
         {phonetic && (
           <View>
             <Text>{phonetic.text}</Text>
-            <AntDesign name="sound" size={16} color="black" onPress={
-              () => {
-                console.log(phonetic);
-                /* TODO: refactor this workaround */
-                phonetic.player.sound.playAsync().then(() => {
-                  /* repeat play */
-                  phonetic.player.sound.replayAsync().then(() => {
-                    console.log("success replay sound");
-                  });
-              });
-              }
-            }
+            <AntDesign
+              name="sound"
+              size={16}
+              color="black"
+              onPress={playPhonetic}
             />
           </View>
         )}
