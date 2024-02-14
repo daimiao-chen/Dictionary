@@ -73,13 +73,14 @@ export const WordCard = ({ word, isDark }) => {
       <Card.Title title={word} right={rightButton} />
       <Card.Content style={styles.cardContext}>
         {phonetic && (
-          <View>
+          <View style={styles.phoneticContainer}>
             <Text>{phonetic.text}</Text>
             <AntDesign
               name="sound"
               size={16}
               color="black"
               onPress={playPhonetic}
+              style={styles.phoneticButton}
             />
           </View>
         )}
@@ -128,6 +129,12 @@ const styles = StyleSheet.create({
   },
   cardContext: {
     height: 400,
+  },
+  phoneticContainer: {
+    flexDirection: 'row',
+  },
+  phoneticButton: {
+    marginLeft: 10,
   },
   cardItem: {
     marginTop: 5,
