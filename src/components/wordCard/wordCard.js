@@ -105,7 +105,7 @@ export const WordItem = ({ item }) => {
   const showModal = () => setVisible(true);
   
   return (
-    <View>
+    <View style={styles.cardItem} >
       <Portal>
         <Modal visible={visible} onDismiss={() => {setVisible(false)}} style={styles.modal} >
           <WordCard word={item.word} />
@@ -128,6 +128,9 @@ const styles = StyleSheet.create({
   },
   cardContext: {
     height: 400,
+  },
+  cardItem: {
+    marginTop: 5,
   },
 });
 
