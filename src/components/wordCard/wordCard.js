@@ -2,6 +2,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
 
 export const WordCard = ({ word, isDark }) => {
@@ -31,17 +32,7 @@ export const WordCard = ({ word, isDark }) => {
   );
 
   const playPhonetic = () => {
-    if (!phonetic) {
-      console.error("phonetic is not available");
-      return;
-    }
-    /* TODO: refactor this workaround */
-    phonetic.player.sound.playAsync().then(() => {
-      /* repeat play */
-      phonetic.player.sound.replayAsync().then(() => {
-        console.log("success replay sound");
-      });
-    });
+    tts.speak(word);
   }
 
   React.useEffect(() => {
@@ -78,9 +69,7 @@ export const WordCard = ({ word, isDark }) => {
     <Card style={ { margin:10, }}>
       <Card.Title title={word} right={rightButton} />
       <Card.Content style={styles.cardContext}>
-        {phonetic && (
           <View style={styles.phoneticContainer}>
-            <Text>{phonetic.text}</Text>
             <AntDesign
               name="sound"
               size={16}
@@ -89,7 +78,6 @@ export const WordCard = ({ word, isDark }) => {
               style={styles.phoneticButton}
             />
           </View>
-        )}
         {subDict && subDict[word] &&
           <FlatList
             data={subDict[word].definitions}
