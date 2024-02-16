@@ -66,10 +66,16 @@ export const WordCard = ({ word, isDark }) => {
       console.error(error);
       //throw error;
     });
+
+    /* explor the useEffect */
+    console.log("init be called when word is changed");
+    return () => {
+      console.log("deinit be called when word is changed");
+    };
   }, [word]);
 
   return (
-    <Card>
+    <Card style={ { margin:10, }}>
       <Card.Title title={word} right={rightButton} />
       <Card.Content style={styles.cardContext}>
         {phonetic && (
@@ -84,7 +90,7 @@ export const WordCard = ({ word, isDark }) => {
             />
           </View>
         )}
-        {subDict && 
+        {subDict && subDict[word] &&
           <FlatList
             data={subDict[word].definitions}
             renderItem={({ item }) => (
@@ -95,6 +101,9 @@ export const WordCard = ({ word, isDark }) => {
             )}
             keyExtractor={(item, index) => index.toString()}
           />
+        }
+        {(subDict === undefined || subDict[word] === undefined) &&
+          <Text>Word not found</Text>
         }
       </Card.Content>
     </Card>
@@ -129,6 +138,7 @@ const styles = StyleSheet.create({
   },
   cardContext: {
     height: 400,
+    width: 300,
   },
   phoneticContainer: {
     flexDirection: 'row',
