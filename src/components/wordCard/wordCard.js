@@ -31,6 +31,17 @@ export const WordCard = ({ word, isDark }) => {
     />
   );
 
+  const isFavorite = (sqlResult) => {
+    console.log(sqlResult);
+    for (x in sqlResult) {
+      if (sqlResult[x].word === word) {
+        setIsLiked(true);
+        return;
+      }
+    }
+    setIsLiked(false);
+  }
+
   const playPhonetic = () => {
     tts.speak(word);
   }
@@ -44,12 +55,8 @@ export const WordCard = ({ word, isDark }) => {
       throw error;
     });
     /* check if word is favourite */
-    wordDB.isFavourite(word).then((isFavourite) => {
-      setIsLiked(isFavourite);
-    }).catch((error) => {
-      console.error(error);
-      throw error;
-    });
+    wordDB.registerFavouriteListener(isFavorite);
+
     /* get phonetic */
     wordDB.getPhonetic(word).then((phonetic) => {
       setPhonetic(phonetic);
@@ -58,11 +65,9 @@ export const WordCard = ({ word, isDark }) => {
       //throw error;
     });
 
-    /* explor the useEffect */
-    console.log("init be called when word is changed");
     return () => {
-      console.log("deinit be called when word is changed");
-    };
+      wordDB.unregisterFavouriteListener(isFavorite);
+    }
   }, [word]);
 
   return (
@@ -126,7 +131,6 @@ const styles = StyleSheet.create({
   },
   cardContext: {
     height: 400,
-    width: 300,
   },
   phoneticContainer: {
     flexDirection: 'row',
