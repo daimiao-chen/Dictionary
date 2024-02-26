@@ -34,14 +34,14 @@ const executeSql = (sql, params) => {
 async function initializeDatabase()
 {
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-    console.log('making directory');
+    console.log('making database');
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
     await FileSystem.downloadAsync(
       Asset.fromModule(require('../../assets/Dictionary.db')).uri,
       FileSystem.documentDirectory + 'SQLite/Dictionary.db'
     );
   } else {
-    console.log('directory exists');
+    console.log('database exists');
   }
 
   let ldb = SQLite.openDatabase('Dictionary.db');
