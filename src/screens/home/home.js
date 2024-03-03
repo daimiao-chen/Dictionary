@@ -1,14 +1,17 @@
 import React from 'react';
 import { View } from 'react-native';
-import { PaperProvider, Button, Portal, Modal } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import { PaperProvider, Button, Portal, Modal} from 'react-native-paper';
+import { StyleSheet, Text } from 'react-native';
 import { TextInput } from 'react-native';
 import { WordCard } from '../../components/wordCard/wordCard';
 import { AntDesign } from '@expo/vector-icons';
 
+import * as wordDB from '../../utils/word';
+
 export const Home = () => {
   const [displayWord, setDisplayWord] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
+  const [daliyWord, setDailyWord] = React.useState('');
   const search = () => {
     if (searchText === '') {
       return;
@@ -20,6 +23,14 @@ export const Home = () => {
       + searchText.slice(1).toLowerCase().trim());
     setDisplayWord(true);
   };
+
+  React.useEffect(() => {
+    /* if you want random a word, please follow this code */
+    wordDB.pickRandomWord().then((word) => {
+      console.log(word);
+      setDailyWord(word.word);
+    })
+  }, []);
 
   return (
     <PaperProvider>
@@ -43,6 +54,10 @@ export const Home = () => {
               <WordCard word={searchText} />
             </Modal>
         </Portal>
+      </View>
+      <View>
+        <Text>Daily Word</Text>
+        <WordCard word={daliyWord} />
       </View>
     </PaperProvider>
   );
