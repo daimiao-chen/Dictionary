@@ -75,6 +75,7 @@ export const WordCard = ({ word, isDark }) => {
       <Card.Title title={word} right={rightButton} />
       <Card.Content style={styles.cardContext}>
           <View style={styles.phoneticContainer}>
+            {phonetic && <Text>{phonetic.text}</Text>}
             <AntDesign
               name="sound"
               size={16}
