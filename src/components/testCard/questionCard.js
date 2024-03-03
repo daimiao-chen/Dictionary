@@ -26,14 +26,15 @@ export const QuestionCard = ({checkResult}) => {
   }
 
   return (
-    <View>
+    <View style={styles.mainView}>
       <AntDesign
-        name="Sound"
+        name="sound"
         size={48}
         color="blue"
         onPress={playPhonetic}
       />
       <TextInput
+        style={styles.inputText}
         onChangeText={text => onChangeText(text)}
         value={answer}
         placeholder="Type your answer here"
@@ -44,3 +45,20 @@ export const QuestionCard = ({checkResult}) => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  mainView: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 20,
+  },
+  inputText: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    margin: 20,
+  },
+});
+
