@@ -18,7 +18,7 @@ export const QuestionCard = ({checkResult}) => {
   }
 
   const check = () => {
-    if (answer === word) {
+    if (answer.toLowerCase()  === word.toLowerCase()) {
       checkResult("rightAns");
     } else {
       checkResult("wrongAns");

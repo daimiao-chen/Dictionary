@@ -1,5 +1,7 @@
 import React from 'react';
 import { QuestionCard } from '../../components/testCard/questionCard';
+import { RightCard } from '../../components/testCard/rightCard';
+import { WrongCard } from '../../components/testCard/wrongCard';
 import { View } from 'react-native';
 
 export const Test = () => {
@@ -17,10 +19,15 @@ export const Test = () => {
   React.useEffect(() => {
     console.log('state:', state);
   }, [state]);
+  /* 
+      <QuestionCard checkResult={checkResult} />
+  */
 
   return (
     <View>
-      <QuestionCard checkResult={checkResult} />
+      {state === 'question' && <QuestionCard checkResult={checkResult} />}
+      {state === 'rightAns' && <RightCard onChange={checkResult} />}
+      {state === 'wrongAns' && <WrongCard onChange={checkResult} />}
     </View>
   );
 }
