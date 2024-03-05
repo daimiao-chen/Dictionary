@@ -53,14 +53,13 @@ export const Home = () => {
             style={styles.searchButton}
           />
         </View>
-        <Portal>
+        <Portal>         
           <Modal visible={displayWord} onDismiss={() => setDisplayWord(false)}>
             <WordCard word={searchText} />
           </Modal>
         </Portal>
       </View>
       <View>
-        
         <WordCard word={dailyWord} />
         <Button style={styles.button} onPress={updateDailyWord}>
         <Text style={styles.buttonText}>I WANT MORE</Text>
@@ -95,6 +94,12 @@ const styles = StyleSheet.create({
   searchButton: {
     fontSize: 28,
   },
+  // dailyStyle: {
+  //   fontSize: 24,
+
+  //  // alignItems: 'center',
+  //  // padding: 10,
+  // },
   dailyWordContainer: {
     marginTop: 20,
     alignItems: 'center',
