@@ -5,8 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
 
-export const QuestionCard = ({checkResult}) => {
-  const [word, setWord] = React.useState('apple');
+export const QuestionCard = ({onChange, word}) => {
   const [answer, setAnswer] = React.useState('');
 
   const playPhonetic = () => {
@@ -14,15 +13,8 @@ export const QuestionCard = ({checkResult}) => {
   }
 
   const onChangeText = (text) => {
+    onChange(text);
     setAnswer(text);
-  }
-
-  const check = () => {
-    if (answer.toLowerCase()  === word.toLowerCase()) {
-      checkResult("rightAns");
-    } else {
-      checkResult("wrongAns");
-    }
   }
 
   return (
@@ -39,9 +31,6 @@ export const QuestionCard = ({checkResult}) => {
         value={answer}
         placeholder="Type your answer here"
       />
-      <Button mode="contained" onPress={check}>
-        CHECK 
-      </Button>
     </View>
   );
 }

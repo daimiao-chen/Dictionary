@@ -65,6 +65,17 @@ async function initializeDatabase()
     console.error(e);
   }
 
+  /* the amount of word_list */
+  executeSql('SELECT COUNT(*) FROM word_list', []).then(results => {
+    console.log('word_list count:', results.rows._array[0]['COUNT(*)']);
+  });
+
+  /*
+  executeSql('Count * FROM entries', []).then(results => {
+    console.log('entries count:', results.rows._array.length);
+  });
+  */
+
   for (x of initializedCallback) {
     x();
   }
@@ -101,6 +112,8 @@ export const pickRandomWord = () => {
         return results.rows._array[0];
       });
 }
+
+export 
 
 const genWordObjsFromDatabase = (databaseResults) => {
   let subDict =  {}
@@ -223,4 +236,10 @@ export const getPhonetic = (word) => {
     });
 }
 
+export const getTestList = () => {
+  return executeSql('SELECT * FROM word_list WHERE learned = 0', [])
+    .then(results => {
+      return results.rows._array;
+    });
+}
 
