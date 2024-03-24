@@ -2,14 +2,23 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
 
-export const WordCard = ({ word, isDark }) => {
-
-  const [subDict, setSubDict] = React.useState();
+const rightButton = ({word}) => {
   const [isLiked, setIsLiked] = React.useState(false);
-  const [phonetic, setPhonetic] = React.useState(null);
+  const [isLearnd, setIsLearnd] = React.useState(false);
+
+  const isFavorite = (sqlResult) => {
+    for (x in sqlResult) {
+      if (sqlResult[x].word === word) {
+        setIsLiked(true);
+        return;
+      }
+    }
+    setIsLiked(false);
+  }
 
   const heartoOnPress = () => {
     var handle = isLiked ? wordDB.deleteFavourite : wordDB.addFavourite;
@@ -21,26 +30,68 @@ export const WordCard = ({ word, isDark }) => {
     });
   }
 
-  const rightButton = (props) => (
-    <AntDesign
-      name="hearto"
-      size={16}
-      color={isLiked ? "red" : "black"}
-      onPress={heartoOnPress}
-      style={styles.CardRightButton}
-    />
-  );
-
-  const isFavorite = (sqlResult) => {
-    console.log(sqlResult);
-    for (x in sqlResult) {
-      if (sqlResult[x].word === word) {
-        setIsLiked(true);
-        return;
-      }
-    }
-    setIsLiked(false);
+  const bookOnPress = () => {
+    wordDB.setLearned(word).then(() => {
+      console.log("setLearned");
+      setIsLearnd(!isLearnd);
+    }).catch((error) => {
+      console.error(error);
+      throw error;
+    });
   }
+
+  const unbookOnPress = () => {
+    wordDB.unsetLearned(word).then(() => {
+      console.log("unsetLearned");
+      setIsLearnd(!isLearnd);
+    }).catch((error) => {
+      console.error(error);
+      throw error;
+    });
+  }
+  React.useEffect(() => {
+    /* check if word is favourite */
+    wordDB.registerFavouriteListener(isFavorite);
+    return () => {
+      wordDB.unregisterFavouriteListener(isFavorite);
+    }
+  }, [word]);
+
+
+  return (
+    <View style={styles.CardRightButton}>
+    <View style={styles.columnContainer}>
+      <AntDesign
+        name="hearto"
+        size={16}
+        color={isLiked ? "red" : "black"}
+        onPress={heartoOnPress}
+      />
+      { !isLearnd && (
+        <Feather
+          name="book"
+          size={16}
+          color="black"
+          onPress={bookOnPress}
+        />
+      )}
+      { isLearnd && (
+        <Feather
+          name="book-open"
+          size={16}
+          color="red"
+          onPress={unbookOnPress}
+        />
+      )}
+      </View>
+    </View>
+  );
+}
+
+export const WordCard = ({ word, isDark }) => {
+
+  const [subDict, setSubDict] = React.useState();
+  const [phonetic, setPhonetic] = React.useState(null);
 
   const playPhonetic = () => {
     try {
@@ -58,8 +109,6 @@ export const WordCard = ({ word, isDark }) => {
       console.error(error);
       throw error;
     });
-    /* check if word is favourite */
-    wordDB.registerFavouriteListener(isFavorite);
 
     /* get phonetic */
     /*
@@ -70,15 +119,12 @@ export const WordCard = ({ word, isDark }) => {
       //throw error;
     });
     */
-
-    return () => {
-      wordDB.unregisterFavouriteListener(isFavorite);
-    }
   }, [word]);
 
   return (
     <Card style={ { margin:10, }}>
-      <Card.Title title={word} right={rightButton} />
+      <Card.Title title={word} right={() =>
+        rightButton({word: word})} />
       <Card.Content style={styles.cardContext}>
           <View style={styles.phoneticContainer}>
             {phonetic && <Text>{phonetic.text}</Text>}
@@ -123,7 +169,9 @@ export const WordItem = ({ item }) => {
       </Portal>
 
       <Card onPress={showModal}>
-        <Card.Title title={item.word} subtitle={item.added_date} />
+        <Card.Title title={item.word} subtitle={item.added_date} 
+          right = {() =>
+        rightButton({word: item.word})}/>
       </Card>
     </View>
   );
@@ -147,6 +195,10 @@ const styles = StyleSheet.create({
   },
   cardItem: {
     marginTop: 5,
+  },
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 

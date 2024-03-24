@@ -243,3 +243,25 @@ export const getTestList = () => {
     });
 }
 
+export const setLearned = (word) => {
+  console.log('setLearned:', word);
+  return executeSql('UPDATE word_list SET learned = 1 WHERE word = ?', [word])
+    .then(() => {
+      pushFavouriteChangeed();
+    });
+}
+
+export const unsetLearned = (word) => {
+  return executeSql('UPDATE word_list SET learned = 0 WHERE word = ?', [word])
+    .then(() => {
+      pushFavouriteChangeed();
+    });
+}
+
+export const isLearned = (word) => {
+  return executeSql('SELECT * FROM word_list WHERE word = ? AND learned = 1', [word])
+    .then(results => {
+      return results.rows._array.length > 0;
+    });
+}
+
