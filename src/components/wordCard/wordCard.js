@@ -43,7 +43,11 @@ export const WordCard = ({ word, isDark }) => {
   }
 
   const playPhonetic = () => {
-    tts.speak(word);
+    try {
+      tts.speak(word);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   React.useEffect(() => {
@@ -58,12 +62,14 @@ export const WordCard = ({ word, isDark }) => {
     wordDB.registerFavouriteListener(isFavorite);
 
     /* get phonetic */
+    /*
     wordDB.getPhonetic(word).then((phonetic) => {
-      setPhonetic(phonetic);
+      //setPhonetic(phonetic);
     }).catch((error) => {
       console.error(error);
       //throw error;
     });
+    */
 
     return () => {
       wordDB.unregisterFavouriteListener(isFavorite);

@@ -5,6 +5,9 @@ import { Home } from './src/screens/home/home';
 import { Favourite } from './src/screens/favourite/favourite';
 import { Test } from './src/screens/test/test';
 import { Settings } from './src/screens/settings/settings';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 const Tab = createBottomTabNavigator();
 

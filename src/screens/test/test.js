@@ -59,6 +59,7 @@ export const Test = () => {
     } else {
       setState('wrongAns');
     }
+    setAnswer('');
   }
 
   const nextQuestion = () => {
@@ -68,6 +69,10 @@ export const Test = () => {
 
   const changeTestWord = () => {
     let word = testList[Math.floor(Math.random() * testList.length)];
+    if (word === undefined) {
+      setWord('');
+      return;
+    }
     console.log('word:', word['word']);
     setWord(word['word']);
   }
@@ -85,28 +90,47 @@ export const Test = () => {
     };
   }, []);
 
+  const restart = () => {
+    testListener();
+    changeTestWord();
+  }
+
+  React.useEffect(() => {
+    console.log(answer);
+  }, [answer]);
+
   return (
-    <View style={styles.mainView}>
-      <View style={styles.iconView}>
-        {state === 'question' && <QuestionCard onChange={changeAnswer} word={word}/>}
-        {state === 'rightAns' && <RightIcon />}
-        {state === 'wrongAns' && <WrongIcon word={word} />}
-      </View>
-      <View style={styles.buttonGroup}>
-        <View style={styles.button}>
-          <Button mode="contained" onPress={nextQuestion}> Next </Button>
-        </View>
-        {state === 'question' && (
-          <View style={styles.button}>
-            <Button
-              mode="contained"
-              disabled={answer === ''}
-              onPress={checkAnswer}
-            >Submit</Button>
+    <View>
+      { word !== '' && (
+        <View style={styles.mainView}>
+          <View style={styles.iconView}>
+            {state === 'question' && <QuestionCard onChange={changeAnswer} word={word}/>}
+            {state === 'rightAns' && <RightIcon />}
+            {state === 'wrongAns' && <WrongIcon word={word} />}
           </View>
-        )}
-      </View>
-      <Text> Need to test {testList.length} words. </Text>
+          <View style={styles.buttonGroup}>
+            <View style={styles.button}>
+              <Button mode="contained" onPress={nextQuestion}> Next </Button>
+            </View>
+            {state === 'question' && (
+              <View style={styles.button}>
+                <Button
+                  mode="contained"
+                  disabled={answer === ''}
+                  onPress={checkAnswer}
+                >Submit</Button>
+              </View>
+            )}
+          </View>
+          <Text> Need to test {testList.length} words. </Text>
+        </View>
+      )}
+      { word === '' && (
+        <View>
+          <Text> you finished the test. </Text>
+          <Button mode="contained" onPress={restart}> Restart </Button>
+        </View>
+      )}
     </View>
   );
 }
