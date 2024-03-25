@@ -11,9 +11,15 @@ const rightButton = ({word}) => {
   const [isLearnd, setIsLearnd] = React.useState(false);
 
   const isFavorite = (sqlResult) => {
+    console.log("favorite be calld", sqlResult);
     for (x in sqlResult) {
       if (sqlResult[x].word === word) {
         setIsLiked(true);
+        if (sqlResult[x].learned === 1) {
+          setIsLearnd(true);
+        } else {
+          setIsLearnd(false);
+        }
         return;
       }
     }
