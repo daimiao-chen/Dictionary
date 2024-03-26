@@ -73,7 +73,7 @@ export const Test = () => {
       setWord('');
       return;
     }
-    console.log('word:', word['word']);
+    console.log('test word:', word['word']);
     setWord(word['word']);
   }
 
@@ -95,10 +95,6 @@ export const Test = () => {
     testListener();
     changeTestWord();
   }
-
-  React.useEffect(() => {
-    console.log(answer);
-  }, [answer]);
 
   return (
     <View>

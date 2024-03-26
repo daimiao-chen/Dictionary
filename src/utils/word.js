@@ -219,10 +219,8 @@ export const getPhonetic = (word) => {
     })
     .then(phonetic => {
       if (phonetic !== null) {
-        console.log(`${phonetic.text} ${phonetic.audio}`);
         return Audio.Sound.createAsync({ uri: phonetic.audio })
           .then((sound) => {
-            console.log("success create sound");
             phonetic.player = sound
             return phonetic;
           })
@@ -244,7 +242,6 @@ export const getTestList = () => {
 }
 
 export const setLearned = (word) => {
-  console.log('setLearned:', word);
   return executeSql('UPDATE word_list SET learned = 1 WHERE word = ?', [word])
     .then(() => {
       pushFavouriteChangeed();

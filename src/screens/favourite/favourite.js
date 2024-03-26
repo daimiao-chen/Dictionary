@@ -10,7 +10,7 @@ export const Favourite = () => {
   const [filterList, setFilterList] = React.useState([]);
 
   const favouriteListener = (results) => {
-    console.log('Favourite listener', results);
+    console.log('Favourite listener', results.map((x) => x.word));
     setFavouriteList(results);
   };
 

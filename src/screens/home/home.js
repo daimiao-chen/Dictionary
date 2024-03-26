@@ -24,7 +24,6 @@ export const Home = () => {
 /* if you want random a word, please follow this code */
   React.useEffect(() => {
     wordDB.pickRandomWord().then((word) => {
-      console.log(word);
       setDailyWord(word.word);
     })
   }, []);

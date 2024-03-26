@@ -11,7 +11,6 @@ const rightButton = ({word}) => {
   const [isLearnd, setIsLearnd] = React.useState(false);
 
   const isFavorite = (sqlResult) => {
-    console.log("favorite be calld", sqlResult);
     for (x in sqlResult) {
       if (sqlResult[x].word === word) {
         setIsLiked(true);
@@ -38,7 +37,6 @@ const rightButton = ({word}) => {
 
   const bookOnPress = () => {
     wordDB.setLearned(word).then(() => {
-      console.log("setLearned");
       setIsLearnd(!isLearnd);
     }).catch((error) => {
       console.error(error);
@@ -48,7 +46,6 @@ const rightButton = ({word}) => {
 
   const unbookOnPress = () => {
     wordDB.unsetLearned(word).then(() => {
-      console.log("unsetLearned");
       setIsLearnd(!isLearnd);
     }).catch((error) => {
       console.error(error);

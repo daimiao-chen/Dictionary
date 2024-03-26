@@ -22,8 +22,7 @@ const setNotification = (triggerTime) => {
 }
 
 export const triggerNotification = (time) => {
-  console.log('time:', time);
-  console.log('repeat:', time.repeats);
+  console.log(`notification ${time.time} repeat ${time.repeats}`);
   /* get permission */
   Notifications.requestPermissionsAsync().then((status) => {
     if (status.granted) {
