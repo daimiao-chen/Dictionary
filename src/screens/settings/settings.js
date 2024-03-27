@@ -2,11 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
-import {triggerNotification} from '../../components/notifications/notifications';
-import {NotificationSlider} from '../../components/notifications/notifications';
-import { convertTimeToSeconds } from '../../components/notifications/notifications';
-import { cancelNotifications } from '../../components/notifications/notifications';
-import { getNotificationStatus } from '../../components/notifications/notifications';
+import {triggerNotification, NotificationSlider, cancelNotifications, getNotificationStatus, convertTimeToSeconds} from '../../components/notifications/notifications';
 
 export const Settings = () => {
   const [time, setTime] = React.useState(0);
@@ -17,7 +13,6 @@ export const Settings = () => {
       setIsNotification(status);
     });
   }, []);
-
 
   const triggerNotificationHandle = () => {
     let triggerTime = {
@@ -35,30 +30,56 @@ export const Settings = () => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <NotificationSlider value={time} onValueChange={setTime} />
-      <View style={styles.RowContainer}>
+      <View style={styles.rowContainer}>
         <Button 
+          style={styles.button}
           mode="contained"
-          onPress={triggerNotificationHandle} >Trigger Notification</Button>
+          onPress={triggerNotificationHandle}
+          labelStyle={styles.buttonText}>Trigger Notification</Button>
         <Button
+          style={styles.button}
           mode="contained"
           disabled={!isNotification}
           onPress={cancelNotificationHandle}
-          > Cancel Notifications</Button>
+          labelStyle={styles.buttonText}>Cancel Notifications</Button>
       </View>
-        <Button onPress={()=>wordDB.closeDBandDelete()} >Delete Database</Button>
-
-        
+      <Button 
+        style={styles.deleteButton}
+        onPress={() => wordDB.closeDBandDelete()}
+        labelStyle={styles.buttonText}>Delete Database</Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  RowContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  rowContainer: {
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#525CEB',
+    borderRadius: 8,
+    padding: 10,
+    margin: 10,
+    width: 350, 
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white', 
+    fontSize: 18,
+    fontWeight: 'bold', 
+    textTransform: 'uppercase', 
   },
 });

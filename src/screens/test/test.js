@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 20,
+    color: 'white', 
   },
 });
 
