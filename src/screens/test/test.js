@@ -84,10 +84,10 @@ export const Test = () => {
   };
 
   React.useEffect(() => {
-    wordDB.registerFavouriteListener(testListener);
+    wordDB.registerFavouriteListener("test", testListener);
     changeTestWord();
     return () => {
-      wordDB.unregisterFavouriteListener(testListener);
+      wordDB.unregisterFavouriteListener("test");
     };
   }, []);
 

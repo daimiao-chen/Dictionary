@@ -47,7 +47,7 @@ export const Home = () => {
           />
           <AntDesign
             name="search1"
-            color={searchText === '' ? "#F8EDFF'," : "#F8EDFF"}
+            color={searchText === '' ? "gray" : "white"}
             onPress={search}
             style={styles.searchButton}
           />

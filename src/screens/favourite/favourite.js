@@ -15,10 +15,10 @@ export const Favourite = () => {
   };
 
   React.useEffect(() => {
-    wordDB.registerFavouriteListener(favouriteListener);
+    wordDB.registerFavouriteListener("favouriteScreen", favouriteListener);
 
     return () => {
-      wordDB.unregisterFavouriteListener(favouriteListener);
+      wordDB.unregisterFavouriteListener("favouriteScreen");
     };
   }, []);
 

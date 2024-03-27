@@ -6,60 +6,20 @@ import { Feather } from '@expo/vector-icons';
 import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
 
-const rightButton = ({word}) => {
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [isLearnd, setIsLearnd] = React.useState(false);
-
-  const isFavorite = (sqlResult) => {
-    for (x in sqlResult) {
-      if (sqlResult[x].word === word) {
-        setIsLiked(true);
-        if (sqlResult[x].learned === 1) {
-          setIsLearnd(true);
-        } else {
-          setIsLearnd(false);
-        }
-        return;
-      }
-    }
-    setIsLiked(false);
-  }
-
+const rightButton = ({word, isLearnd, isLiked}) => {
+  /* this compenent should be rendered by father component */
   const heartoOnPress = () => {
     var handle = isLiked ? wordDB.deleteFavourite : wordDB.addFavourite;
-    handle(word).then(() => {
-      setIsLiked(!isLiked);
-    }).catch((error) => {
-      console.error(error);
-      throw error;
-    });
+    handle(word)
   }
 
   const bookOnPress = () => {
-    wordDB.setLearned(word).then(() => {
-      setIsLearnd(!isLearnd);
-    }).catch((error) => {
-      console.error(error);
-      throw error;
-    });
+    wordDB.setLearned(word)
   }
 
   const unbookOnPress = () => {
-    wordDB.unsetLearned(word).then(() => {
-      setIsLearnd(!isLearnd);
-    }).catch((error) => {
-      console.error(error);
-      throw error;
-    });
+    wordDB.unsetLearned(word)
   }
-  React.useEffect(() => {
-    /* check if word is favourite */
-    wordDB.registerFavouriteListener(isFavorite);
-    return () => {
-      wordDB.unregisterFavouriteListener(isFavorite);
-    }
-  }, [word]);
-
 
   return (
     <View style={styles.CardRightButton}>
@@ -91,10 +51,14 @@ const rightButton = ({word}) => {
   );
 }
 
+let uuid = 0;
 export const WordCard = ({ word, isDark }) => {
-
   const [subDict, setSubDict] = React.useState();
   const [phonetic, setPhonetic] = React.useState(null);
+  const [item, setItem] = React.useState(null);
+  const [isLiked, setIsLiked] = React.useState(false);
+  const [isLearnd, setIsLearnd] = React.useState(false);
+  const myuuid = uuid++;
 
   const playPhonetic = () => {
     try {
@@ -103,6 +67,19 @@ export const WordCard = ({ word, isDark }) => {
       console.error(error);
     }
   }
+
+  const getFavouriteItem = () => {
+    wordDB.getFavouriteItem(word).then((item) => {
+      if (item !== undefined) {
+        setItem(item);
+      }
+    })
+  }
+
+  React.useEffect(() => {
+    setIsLiked(item !== null);
+    setIsLearnd(item !== null && item.learned !== 0);
+  }, [item]);
 
   React.useEffect(() => {
     /* search word */
@@ -113,6 +90,13 @@ export const WordCard = ({ word, isDark }) => {
       throw error;
     });
 
+    /* this component will have multiple instance in the same time
+     * since that we need to register with different context */
+    wordDB.registerFavouriteListener(myuuid, getFavouriteItem);
+
+    return () => {
+      wordDB.unregisterFavouriteListener(myuuid);
+    }
     /* get phonetic */
     /*
     wordDB.getPhonetic(word).then((phonetic) => {
@@ -122,12 +106,11 @@ export const WordCard = ({ word, isDark }) => {
       //throw error;
     });
     */
-  }, [word]);
+  }, []);
 
   return (
     <Card style={ { margin:10, }}>
-      <Card.Title title={word} right={() =>
-        rightButton({word: word})} />
+      <Card.Title title={word} right={() => rightButton({word: word, isLearnd: isLearnd, isLiked: isLiked})} />
       <Card.Content style={styles.cardContext}>
           <View style={styles.phoneticContainer}>
             {phonetic && <Text>{phonetic.text}</Text>}
@@ -160,6 +143,7 @@ export const WordCard = ({ word, isDark }) => {
 }
 
 export const WordItem = ({ item }) => {
+  /* this component's father must listen the favourite event */
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
   
@@ -174,7 +158,7 @@ export const WordItem = ({ item }) => {
       <Card onPress={showModal}>
         <Card.Title title={item.word} subtitle={item.added_date} 
           right = {() =>
-        rightButton({word: item.word})}/>
+        rightButton({word: item.word, isLearnd: item.learned !== 0, isLiked: true})}/>
       </Card>
     </View>
   );

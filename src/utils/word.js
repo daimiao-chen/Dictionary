@@ -141,13 +141,27 @@ const genWordObjsFromDatabase = (databaseResults) => {
   return subDict;
 }
 
-let favouriteListeners = [];
+export const getFavouriteItem = (word) => {
+  return executeSql('SELECT * FROM word_list WHERE word = ?', [word])
+  .then(results => {
+    if (results.rows._array.length > 0) {
+      return results.rows._array[0];
+    } else {
+      return null;
+    }
+  });
+}
+
+let favouriteListeners = {};
 
 const pushFavouriteChangeed = () => {
   executeSql('SELECT * FROM word_list', [])
     .then(results => {
-      for (x of favouriteListeners) {
-        x(results.rows._array);
+      let list = results.rows._array;
+      for (x of Object.values(favouriteListeners)) {
+        if (x !== undefined) {
+          x(list);
+        }
       }
     });
 
@@ -155,18 +169,18 @@ const pushFavouriteChangeed = () => {
 }
 
 /* Don't call addFavourite and deleteFavourite in callback */
-export const registerFavouriteListener = (callback) => {
-  /* register callback into the list */
-  favouriteListeners.push(callback);
-
-  /* call pushFavouriteChangeed onece */
-  pushFavouriteChangeed();
-
+export const registerFavouriteListener = (context, callback) => {
+  if (favouriteListeners[context] === undefined) {
+    /* register callback into the list */
+    favouriteListeners[context] = callback;
+    /* call pushFavouriteChangeed onece */
+    pushFavouriteChangeed();
+  }
 }
 
-export const unregisterFavouriteListener = (callback) => {
+export const unregisterFavouriteListener = (context) => {
   /* remove callback from the list */
-  favouriteListeners = favouriteListeners.filter(x => x !== callback);
+  delete favouriteListeners[context];
 }
 
 export const addFavourite = (word) => {
