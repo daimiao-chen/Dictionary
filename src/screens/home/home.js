@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, TextInput } from 'react-native'; // Объед�
 import { PaperProvider, Button, Portal, Modal} from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { WordCard } from '../../components/wordCard/wordCard';
+import { Accelerometer } from 'expo-sensors';
 import * as wordDB from '../../utils/word';
 
 export const Home = () => {
@@ -26,6 +27,19 @@ export const Home = () => {
     wordDB.pickRandomWord().then((word) => {
       setDailyWord(word.word);
     })
+
+    Accelerometer.setUpdateInterval(50);
+    const subscriptionShake = Accelerometer.addListener(accelerometerData => {
+      const { x, y, z } = accelerometerData;
+      if (Math.abs(x) > 1.5 || Math.abs(y) > 1.5 || Math.abs(z) > 1.5) {
+        updateDailyWord();
+      }
+    });
+
+    return () => {
+      subscriptionShake.remove();
+    }
+
   }, []);
 
   const updateDailyWord = () => {
@@ -71,56 +85,38 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#525CEB',
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
   searchComponent: {
+    flex: 1,
+    backgroundColor: '#525CEB',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   inputText: {
     flex: 1,
-    height: 40,
     borderWidth: 1,
     borderColor: '#F8EDFF',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    marginRight: 10,
     color: '#F8EDFF',
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    height: 40,
   },
   searchButton: {
     fontSize: 28,
   },
-  // dailyStyle: {
-  //   fontSize: 24,
-
-  //  // alignItems: 'center',
-  //  // padding: 10,
-  // },
   dailyWordContainer: {
     marginTop: 20,
     alignItems: 'center',
-    
-  },
-  dailyWordText: {
-    fontSize: 20,
-    marginBottom: 10,
-    paddingTop: 10,
-    color: '#F8EDFF',
-    textAlign: 'center', 
-    fontWeight: 'bold', 
   },
   button: {
     backgroundColor: '#525CEB',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 8,
-    elevation: 3,
-    marginTop: 30, 
     width: 250, 
     alignSelf: 'center', 
+    padding: 10,
+    margin: 5,
   },
   buttonText: {
     color: 'white', 
