@@ -37,17 +37,17 @@ export const QuestionCard = ({onChange, word}) => {
 
 const styles = StyleSheet.create({
   mainView: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 20,
   },
   inputText: {
     height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
     padding: 10,
-    margin: 20,
+    margin: 10,
+    flex: 1,
   },
 });
 

@@ -23,12 +23,13 @@ const rightButton = ({word, isLearnd, isLiked}) => {
 
   return (
     <View style={styles.CardRightButton}>
-    <View style={styles.columnContainer}>
+    <View style={styles.rowContianer}>
       <AntDesign
         name="hearto"
         size={16}
         color={isLiked ? "red" : "black"}
         onPress={heartoOnPress}
+        style={styles.rightIcon}
       />
       { !isLearnd && (
         <Feather
@@ -36,6 +37,7 @@ const rightButton = ({word, isLearnd, isLiked}) => {
           size={16}
           color="black"
           onPress={bookOnPress}
+          style={styles.rightIcon}
         />
       )}
       { isLearnd && (
@@ -44,6 +46,7 @@ const rightButton = ({word, isLearnd, isLiked}) => {
           size={16}
           color="red"
           onPress={unbookOnPress}
+          style={styles.rightIcon}
         />
       )}
       </View>
@@ -183,9 +186,12 @@ const styles = StyleSheet.create({
   cardItem: {
     marginTop: 5,
   },
-  columnContainer: {
+  rowContianer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+  },
+  rightIcon: {
+    margin: 15,
   },
 });
 
