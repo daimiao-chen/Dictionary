@@ -98,6 +98,7 @@ export const WordCard = ({ word, isDark }) => {
     wordDB.registerFavouriteListener(myuuid, getFavouriteItem);
 
     return () => {
+      console.log('unregister listener');
       wordDB.unregisterFavouriteListener(myuuid);
     }
     /* get phonetic */
@@ -109,7 +110,7 @@ export const WordCard = ({ word, isDark }) => {
       //throw error;
     });
     */
-  }, []);
+  }, [word]);
 
   return (
     <Card style={ { margin:10, }}>
