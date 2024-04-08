@@ -304,17 +304,17 @@ export const getNotificationTime = () => {
     });
 }
 
-export const setBarkMode = (mode) => {
+export const setDarkMode = (mode) => {
   return executeSql('INSERT OR REPLACE INTO user_config (key, value) VALUES (?, ?)', ['bark_mode', mode.toString()]);
 }
 
-export const getBarkMode = () => {
+export const getDarkMode = () => {
   return executeSql('SELECT * FROM user_config WHERE key = ?', ['bark_mode'])
     .then(results => {
       if (results.rows._array.length > 0) {
         return results.rows._array[0].value === 'true';
       } else {
-        return null;
+        return false;
       }
     });
 }
