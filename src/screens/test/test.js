@@ -1,13 +1,18 @@
 import React from 'react';
 import { QuestionCard } from '../../components/testCard/questionCard';
-import { View} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as wordDB from '../../utils/word';
 import { normalStyles, darkStyles } from '../../utils/style';
 
-const WrongScreen = ({word}) => {
-  var styles = normalStyles;
+/**
+ * Displayed when the user gives a wrong answer.
+ * @param {string} word - The correct answer.
+ * @param {boolean} isDark - Flag indicating the theme (dark/light).
+ */
+const WrongScreen = ({ word, isDark }) => {
+  const styles = isDark ? darkStyles : normalStyles;
   return (
     <View style={styles.container}>
       <AntDesign
@@ -16,13 +21,17 @@ const WrongScreen = ({word}) => {
         color="red"
         style={styles.iconSize}
       />
-      <Text>The right Answer is: {word} </Text>
+      <Text style={styles.header}>The right Answer is: {word}</Text>
     </View>
   );
 }
 
-const RightScreen = () => {
-  var styles = normalStyles;
+/**
+ * Displayed when the user gives a correct answer.
+ * @param {boolean} isDark - Flag indicating the theme (dark/light).
+ */
+const RightScreen = ({ isDark }) => {
+  const styles = isDark ? darkStyles : normalStyles;
   return (
     <AntDesign
       name="checkcircleo"
@@ -33,43 +42,43 @@ const RightScreen = () => {
   );
 }
 
-const AchivementScreen = ({reset}) => {
-  var styles = normalStyles;
+/**
+ * Displayed when the user finishes the test.
+ * @param {function} reset - Function to reset the test.
+ * @param {boolean} isDark - Flag indicating the theme (dark/light).
+ */
+const AchievementScreen = ({ reset, isDark }) => {
+  const styles = isDark ? darkStyles : normalStyles;
   return (
     <View style={styles.container}>
-      <Text style={styles.header}> You have finished the test. </Text>
-      <Button style={styles.button} mode="contained" onPress={reset}> Restart </Button>
+      <Text style={styles.header}>You have finished the test.</Text>
+      <Button style={styles.button} mode="contained" onPress={reset}>Restart</Button>
     </View>
   );
 }
 
-/* ****************************************************************************
- * How to determind a word need to test
- * 1. only in the favourite list words will be tested
- * 2. only the word is not master will be tested
- * 3. if a word be short successfully three times, it will be marked as learned
- * ***************************************************************************/
 export const Test = () => {
-  /* state is a machine state, it can be one of:
-   *          question
-   *          |^    |^
-   *          v|    v|
-   *      rightAns wrongAns */
   const [state, setState] = React.useState('question');
   const [testList, setTestList] = React.useState([]);
   const [word, setWord] = React.useState('English');
   const [answer, setAnswer] = React.useState('');
-  var styles = normalStyles;
+  const [isDark, setIsDark] = React.useState(false);
 
+  /**
+   * Set the user's answer.
+   * @param {string} ans - The user's answer.
+   */
   const changeAnswer = (ans) => {
     setAnswer(ans);
   }
 
+  /**
+   * Check if the user's answer is correct.
+   */
   const checkAnswer = () => {
-    /* move the right word from test List */
     setTestList(testList.filter((x) => x['word'] !== word));
     if (answer.toLowerCase() === word.toLowerCase()) {
-      wordDB.setLearned(word)
+      wordDB.setLearned(word);
       setState('rightAns');
     } else {
       setState('wrongAns');
@@ -77,58 +86,74 @@ export const Test = () => {
     setAnswer('');
   }
 
+  /**
+   * Move to the next question.
+   */
   const nextQuestion = () => {
     setState('question');
     changeTestWord();
   }
 
+  /**
+   * Change the current test word.
+   */
   const changeTestWord = () => {
-    let word = testList[Math.floor(Math.random() * testList.length)];
-    if (word === undefined) {
+    let newWord = testList[Math.floor(Math.random() * testList.length)];
+    if (newWord === undefined) {
       setWord('');
       return;
     }
-    console.log('test word:', word['word']);
-    setWord(word['word']);
+    console.log('test word:', newWord['word']);
+    setWord(newWord['word']);
   }
 
+  /**
+   * Listener for the test.
+   */
   const testListener = () => {
     wordDB.getTestList().then((list) => {
-      changeTestWord();
       setTestList(list);
+      changeTestWord();
     });
   };
 
   React.useEffect(() => {
     wordDB.registerFavouriteListener("test", testListener);
+    wordDB.getDarkMode().then((mode) => {
+      setIsDark(mode);
+    });
     return () => {
       wordDB.unregisterFavouriteListener("test");
     };
   }, []);
 
+  /**
+   * Restart the test.
+   */
   const restart = () => {
     testListener();
     changeTestWord();
   }
 
+  const styles = isDark ? darkStyles : normalStyles;
+
   return (
-    <View>
-      { word !== '' && (
+    <View style={styles.container}>
+      {word !== '' && (
         <View style={styles.container}>
-          {state === 'question' && <QuestionCard onChange={changeAnswer} word={word}/>}
-          {state === 'rightAns' && <RightScreen />}
-          {state === 'wrongAns' && <WrongScreen word={word} />}
-          <Button style={styles.button} mode="contained" onPress={nextQuestion}>  Next </Button>
+          {state === 'question' && <QuestionCard onChange={changeAnswer} word={word} />}
+          {state === 'rightAns' && <RightScreen isDark={isDark} />}
+          {state === 'wrongAns' && <WrongScreen word={word} isDark={isDark} />}
+          <Button style={styles.button} mode="contained" onPress={nextQuestion}>Next</Button>
           {state === 'question' && (
-            <Button style={styles.button} mode="contained" disabled={answer === ''} onPress={checkAnswer} >Check</Button>
+            <Button style={styles.button} mode="contained" disabled={answer === ''} onPress={checkAnswer}>Check</Button>
           )}
-          <Text> Need to test {testList.length} words. </Text>
+          <Text>Need to test {testList.length} words.</Text>
         </View>
       )}
-      { word === '' && (
-        <AchivementScreen reset={restart} />
+      {word === '' && (
+        <AchievementScreen reset={restart} isDark={isDark} />
       )}
     </View>
   );
 }
-

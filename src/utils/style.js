@@ -56,6 +56,7 @@ export const normalStyles = StyleSheet.create({
     marginHorizontal: 10,
     paddingHorizontal: 10,
     height: 40,
+    placeholderTextColor: '#000000',
   },
   filter: {
     height: 40,
@@ -68,9 +69,81 @@ export const normalStyles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 10,
   },
-
 });
 
 export const darkStyles = StyleSheet.create({
+  containerRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#121212',
+  },
+  container: {
+    alignItems: 'center',
+    backgroundColor: '#121212',  
+    flex: 1,  
+  },
+  button: {
+    backgroundColor: '#BB86FC',
+    borderRadius: 8,
+    padding: 10,
+    width: "90%",
+    margin: 10,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#121212',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  disabledButton: {
+    backgroundColor: '#3A3A3A',
+    borderRadius: 8,
+    padding: 10,
+    width: "90%"
+  },
+  redButton: {
+    backgroundColor: '#CF6679',
+    borderRadius: 8,
+    padding: 10,
+    width: "90%",
+    margin: 10,
+  },
+  iconSize: {
+    fontSize: 28,
+    color: '#BB86FC',
+  },
+  searchComponent: {
+    flex: 1,
+    backgroundColor: '#121212',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  inputText: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#BB86FC',
+    borderRadius: 8,
+    color: '#F8EDFF',
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
+    height: 40,
+    placeholderTextColor: '#000000',
+  },
+  filter: {
+    height: 40,
+    borderWidth: 1,
+    margin: 10,
+    padding: 10,
+    borderColor: '#BB86FC',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    margin: 10,
+    color: '#F8EDFF',
+  },
 });
-

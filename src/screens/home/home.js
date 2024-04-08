@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput } from 'react-native'; // Объединяем импорты
+import { View, Text, TextInput } from 'react-native'; 
 import { PaperProvider, Button, Portal, Modal} from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { WordCard } from '../../components/wordCard/wordCard';

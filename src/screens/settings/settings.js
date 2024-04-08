@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
-import {triggerNotification, NotificationSlider, cancelNotifications, getNotificationStatus, convertTimeToSeconds} from '../../components/notifications/notifications';
+import { triggerNotification, NotificationSlider, cancelNotifications, getNotificationStatus, convertTimeToSeconds } from '../../components/notifications/notifications';
 import { normalStyles, darkStyles } from '../../utils/style';
 import * as Updates from 'expo-updates';
 
@@ -13,16 +13,18 @@ export const Settings = () => {
   const darkButtonText = "Dark Mode";
   const lightButtonText = "Light Mode";
 
-  let styles = normalStyles;
+  let styles = isDark ? darkStyles : normalStyles;
+
   React.useEffect(() => {
     wordDB.getDarkMode().then((mode) => {
-      console.log(mode);
+      setIsDark(mode);
     });
   }, []);
 
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
-    wordDB.setDarkMode(!isDark);
+    const newMode = !isDark;
+    setIsDark(newMode);
+    wordDB.setDarkMode(newMode);
     Updates.reloadAsync();
   }
 
@@ -72,7 +74,7 @@ export const Settings = () => {
       <Button
         style={styles.button}
         onPress={toggleDarkMode}
-        labelStyle={styles.buttonText}>{!isDark ? darkButtonText : lightButtonText}</Button>
+        labelStyle={styles.buttonText}>{isDark ? lightButtonText : darkButtonText}</Button>
       <Button 
         style={styles.redButton}
         onPress={() => wordDB.closeDBandDelete()}
