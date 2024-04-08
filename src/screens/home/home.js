@@ -10,6 +10,7 @@ export const Home = () => {
   const [displayWord, setDisplayWord] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
   const [dailyWord, setDailyWord] = React.useState('');
+  const [data, setData] = React.useState({});
 
   const search = () => {
     if (searchText === '') {
@@ -31,6 +32,7 @@ export const Home = () => {
     Accelerometer.setUpdateInterval(50);
     const subscriptionShake = Accelerometer.addListener(accelerometerData => {
       const { x, y, z } = accelerometerData;
+      setData(accelerometerData);
       if (Math.abs(x) > 1.5 || Math.abs(y) > 1.5 || Math.abs(z) > 1.5) {
         updateDailyWord();
       }
@@ -42,6 +44,9 @@ export const Home = () => {
 
   }, []);
 
+  React.useEffect(() => {
+    console.log(data);
+  }, [data]);
   const updateDailyWord = () => {
     wordDB.pickRandomWord().then((word) => {
       setDailyWord(word.word);

@@ -65,6 +65,19 @@ async function initializeDatabase()
     console.error(e);
   }
 
+  /* create use_config with
+   * key(primary key): string, cannot be null
+   * value: string, cannot be null
+   */
+  try {
+    await executeSql(
+      'CREATE TABLE IF NOT EXISTS user_config (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)',
+      []
+    );
+  } catch (e) {
+    console.error(e);
+  }
+
   /* the amount of word_list */
   executeSql('SELECT COUNT(*) FROM word_list', []).then(results => {
     console.log('word_list count:', results.rows._array[0]['COUNT(*)']);
@@ -273,6 +286,21 @@ export const isLearned = (word) => {
   return executeSql('SELECT * FROM word_list WHERE word = ? AND learned = 1', [word])
     .then(results => {
       return results.rows._array.length > 0;
+    });
+}
+
+export const setNotificationTime = (time) => {
+  return executeSql('INSERT OR REPLACE INTO user_config (key, value) VALUES (?, ?)', ['notification_time', time.toString()]);
+}
+
+export const getNotificationTime = () => {
+  return executeSql('SELECT * FROM user_config WHERE key = ?', ['notification_time'])
+    .then(results => {
+      if (results.rows._array.length > 0) {
+        return parseInt(results.rows._array[0].value);
+      } else {
+        return null;
+      }
     });
 }
 

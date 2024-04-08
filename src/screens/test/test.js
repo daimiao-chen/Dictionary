@@ -55,6 +55,7 @@ export const Test = () => {
     /* move the right word from test List */
     setTestList(testList.filter((x) => x['word'] !== word));
     if (answer.toLowerCase() === word.toLowerCase()) {
+      wordDB.setLearned(word)
       setState('rightAns');
     } else {
       setState('wrongAns');
@@ -79,13 +80,13 @@ export const Test = () => {
 
   const testListener = () => {
     wordDB.getTestList().then((list) => {
+      changeTestWord();
       setTestList(list);
     });
   };
 
   React.useEffect(() => {
     wordDB.registerFavouriteListener("test", testListener);
-    changeTestWord();
     return () => {
       wordDB.unregisterFavouriteListener("test");
     };

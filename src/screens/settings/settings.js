@@ -12,6 +12,10 @@ export const Settings = () => {
     getNotificationStatus().then((status) => {
       setIsNotification(status);
     });
+
+    wordDB.getNotificationTime().then((time) => {
+      setTime(time);
+    });
   }, []);
 
   const triggerNotificationHandle = () => {
@@ -22,6 +26,7 @@ export const Settings = () => {
 
     triggerNotification(triggerTime);
     setIsNotification(true);
+    wordDB.setNotificationTime(time);
   }
 
   const cancelNotificationHandle = () => {
@@ -48,7 +53,7 @@ export const Settings = () => {
       <Button 
         style={styles.deleteButton}
         onPress={() => wordDB.closeDBandDelete()}
-        labelStyle={styles.buttonText}>Delete Database</Button>
+        labelStyle={styles.buttonText}>Delete User Data</Button>
     </View>
   );
 }
