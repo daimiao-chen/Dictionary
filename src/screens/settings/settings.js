@@ -1,12 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text} from 'react-native';
 import { Button } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
 import {triggerNotification, NotificationSlider, cancelNotifications, getNotificationStatus, convertTimeToSeconds} from '../../components/notifications/notifications';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 export const Settings = () => {
   const [time, setTime] = React.useState(0);
   const [isNotification, setIsNotification] = React.useState(false);
+
+  let styles = normalStyles;
 
   React.useEffect(() => {
     getNotificationStatus().then((status) => {
@@ -40,7 +43,6 @@ export const Settings = () => {
   return (
     <View style={styles.container}>
       <NotificationSlider value={time} onValueChange={setTime} />
-      <View style={styles.rowContainer}>
         <Button 
           style={styles.button}
           mode="contained"
@@ -52,42 +54,10 @@ export const Settings = () => {
           disabled={!isNotification}
           onPress={cancelNotificationHandle}
           labelStyle={styles.buttonText}>Cancel Notifications</Button>
-      </View>
       <Button 
-        style={styles.deleteButton}
+        style={styles.redButton}
         onPress={() => wordDB.closeDBandDelete()}
         labelStyle={styles.buttonText}>Delete User Data</Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  rowContainer: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: '#525CEB',
-    borderRadius: 8,
-    padding: 10,
-    margin: 10,
-    width: 350, 
-  },
-  deleteButton: {
-    backgroundColor: 'red',
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: 'white', 
-    fontSize: 18,
-    fontWeight: 'bold', 
-    textTransform: 'uppercase', 
-  },
-});

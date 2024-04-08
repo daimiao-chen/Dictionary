@@ -1,7 +1,8 @@
 import * as Notifications from 'expo-notifications';
 import React, { useState, useEffect } from 'react';
 import Slider from '@react-native-community/slider';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 const setNotification = async (triggerTime) => {
   try {
@@ -53,6 +54,7 @@ export const triggerNotification = async (time) => {
 
 export const NotificationSlider = ({ value, onValueChange }) => {
   const [displayValue, setDisplayValue] = useState("");
+  var styles = normalStyles;
 
   useEffect(() => {
     if (value <= 60) {
@@ -65,7 +67,7 @@ export const NotificationSlider = ({ value, onValueChange }) => {
   }, [value]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerRow}>
       <Slider
         style={{ width: "90%", height: 40 }}
         minimumValue={1}
@@ -109,12 +111,3 @@ export const convertTimeToSeconds = (time) => {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 10,
-    paddingLeft: 20,
-  },
-});

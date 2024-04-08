@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 export const QuestionCard = ({onChange, word}) => {
   const [answer, setAnswer] = React.useState('');
+  var styles = normalStyles;
 
   const playPhonetic = () => {
     tts.speak(word);
@@ -18,7 +20,7 @@ export const QuestionCard = ({onChange, word}) => {
   }
 
   return (
-    <View style={styles.mainView}>
+    <View style={styles.containerRow}>
       <AntDesign
         name="sound"
         size={48}
@@ -34,20 +36,4 @@ export const QuestionCard = ({onChange, word}) => {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mainView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: 20,
-  },
-  inputText: {
-    height: 40,
-    borderWidth: 1,
-    padding: 10,
-    margin: 10,
-    flex: 1,
-  },
-});
 

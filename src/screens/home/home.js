@@ -1,16 +1,19 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native'; // Объединяем импорты
+import { View, Text, TextInput } from 'react-native'; // Объединяем импорты
 import { PaperProvider, Button, Portal, Modal} from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { WordCard } from '../../components/wordCard/wordCard';
 import { Accelerometer } from 'expo-sensors';
 import * as wordDB from '../../utils/word';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 export const Home = () => {
   const [displayWord, setDisplayWord] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
   const [dailyWord, setDailyWord] = React.useState('');
   const [data, setData] = React.useState({});
+
+  let styles = normalStyles;
 
   const search = () => {
     if (searchText === '') {
@@ -55,7 +58,7 @@ export const Home = () => {
 
   return (
     <PaperProvider>
-      <View style={styles.container}>
+      <View style={{...styles.container, flex:1}}>
         <View style={styles.searchComponent}>
           <TextInput
             style={styles.inputText}
@@ -68,7 +71,7 @@ export const Home = () => {
             name="search1"
             color={searchText === '' ? "gray" : "white"}
             onPress={search}
-            style={styles.searchButton}
+            style={styles.iconSize}
           />
         </View>
         <Portal>         
@@ -87,48 +90,3 @@ export const Home = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  searchComponent: {
-    flex: 1,
-    backgroundColor: '#525CEB',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  inputText: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#F8EDFF',
-    borderRadius: 8,
-    color: '#F8EDFF',
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
-    height: 40,
-  },
-  searchButton: {
-    fontSize: 28,
-  },
-  dailyWordContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#525CEB',
-    borderRadius: 8,
-    elevation: 3,
-    marginTop: 30, 
-    width: 350, 
-    alignSelf: 'center', 
-    padding: 10,
-    margin: 5,
-  },
-  buttonText: {
-    color: 'white', 
-    fontSize: 18,
-    fontWeight: 'bold', 
-    textTransform: 'uppercase', 
-  },
-});

@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList} from 'react-native';
 import { Button, Card, Text, Modal, Portal } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import * as tts from 'expo-speech';
 import * as wordDB from '../../utils/word';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 const rightButton = ({word, isLearnd, isLiked}) => {
+  var styles = normalStyles;
   /* this compenent should be rendered by father component */
   const heartoOnPress = () => {
     var handle = isLiked ? wordDB.deleteFavourite : wordDB.addFavourite;
@@ -22,14 +24,14 @@ const rightButton = ({word, isLearnd, isLiked}) => {
   }
 
   return (
-    <View style={styles.CardRightButton}>
-    <View style={styles.rowContianer}>
+    <View style={{marginRight: 32}}>
+    <View style={styles.containerRow}>
       <AntDesign
         name="hearto"
         size={16}
         color={isLiked ? "red" : "black"}
         onPress={heartoOnPress}
-        style={styles.rightIcon}
+        style={{margin: 15}}
       />
       { !isLearnd && (
         <Feather
@@ -37,7 +39,7 @@ const rightButton = ({word, isLearnd, isLiked}) => {
           size={16}
           color="black"
           onPress={bookOnPress}
-          style={styles.rightIcon}
+          style={{margin: 15}}
         />
       )}
       { isLearnd && (
@@ -46,7 +48,7 @@ const rightButton = ({word, isLearnd, isLiked}) => {
           size={16}
           color="red"
           onPress={unbookOnPress}
-          style={styles.rightIcon}
+          style={{margin: 15}}
         />
       )}
       </View>
@@ -61,6 +63,7 @@ export const WordCard = ({ word, isDark }) => {
   const [item, setItem] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);
   const [isLearnd, setIsLearnd] = React.useState(false);
+  var styles = normalStyles;
   const myuuid = uuid++;
 
   const playPhonetic = () => {
@@ -115,15 +118,15 @@ export const WordCard = ({ word, isDark }) => {
   return (
     <Card style={ { margin:10, }}>
       <Card.Title title={word} right={() => rightButton({word: word, isLearnd: isLearnd, isLiked: isLiked})} />
-      <Card.Content style={styles.cardContext}>
-          <View style={styles.phoneticContainer}>
+      <Card.Content style={{height: 400}}>
+          <View style={styles.containerRow}>
             {phonetic && <Text>{phonetic.text}</Text>}
             <AntDesign
               name="sound"
               size={16}
               color="black"
               onPress={playPhonetic}
-              style={styles.phoneticButton}
+              style={{marginLeft: 10}}
             />
           </View>
         {subDict && subDict[word] &&
@@ -152,9 +155,9 @@ export const WordItem = ({ item }) => {
   const showModal = () => setVisible(true);
   
   return (
-    <View style={styles.cardItem} >
+    <View style={{marginTop: 5}} >
       <Portal>
-        <Modal visible={visible} onDismiss={() => {setVisible(false)}} style={styles.modal} >
+        <Modal visible={visible} onDismiss={() => {setVisible(false)}} style={{margin: 20}} >
           <WordCard word={item.word} />
         </Modal>
       </Portal>
@@ -167,32 +170,4 @@ export const WordItem = ({ item }) => {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  CardRightButton: {
-    marginRight: 32,
-  },
-  modal: {
-    margin: 20,
-  },
-  cardContext: {
-    height: 400,
-  },
-  phoneticContainer: {
-    flexDirection: 'row',
-  },
-  phoneticButton: {
-    marginLeft: 10,
-  },
-  cardItem: {
-    marginTop: 5,
-  },
-  rowContianer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  rightIcon: {
-    margin: 15,
-  },
-});
 

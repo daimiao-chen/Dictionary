@@ -1,32 +1,45 @@
 import React from 'react';
 import { QuestionCard } from '../../components/testCard/questionCard';
-import { View, StyleSheet } from 'react-native';
+import { View} from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as wordDB from '../../utils/word';
+import { normalStyles, darkStyles } from '../../utils/style';
 
-const WrongIcon = ({word}) => {
+const WrongScreen = ({word}) => {
+  var styles = normalStyles;
   return (
-    <View style={styles.iconView}>
+    <View style={styles.container}>
       <AntDesign
         name="closecircleo"
         size={48}
         color="red"
-        style={styles.icon}
+        style={styles.iconSize}
       />
       <Text>The right Answer is: {word} </Text>
     </View>
   );
 }
 
-const RightIcon = () => {
+const RightScreen = () => {
+  var styles = normalStyles;
   return (
     <AntDesign
       name="checkcircleo"
       size={48}
       color="green"
-      style={styles.icon}
+      style={styles.iconSize}
     />
+  );
+}
+
+const AchivementScreen = ({reset}) => {
+  var styles = normalStyles;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}> You have finished the test. </Text>
+      <Button style={styles.button} mode="contained" onPress={reset}> Restart </Button>
+    </View>
   );
 }
 
@@ -46,6 +59,7 @@ export const Test = () => {
   const [testList, setTestList] = React.useState([]);
   const [word, setWord] = React.useState('English');
   const [answer, setAnswer] = React.useState('');
+  var styles = normalStyles;
 
   const changeAnswer = (ans) => {
     setAnswer(ans);
@@ -100,62 +114,21 @@ export const Test = () => {
   return (
     <View>
       { word !== '' && (
-        <View style={styles.mainView}>
-          <View style={styles.iconView}>
-            {state === 'question' && <QuestionCard onChange={changeAnswer} word={word}/>}
-            {state === 'rightAns' && <RightIcon />}
-            {state === 'wrongAns' && <WrongIcon word={word} />}
-          </View>
-          <View style={styles.buttonGroup}>
-            <View style={styles.button}>
-              <Button mode="contained" onPress={nextQuestion}> Next </Button>
-            </View>
-            {state === 'question' && (
-              <View style={styles.button}>
-                <Button
-                  mode="contained"
-                  disabled={answer === ''}
-                  onPress={checkAnswer}
-                >Submit</Button>
-              </View>
-            )}
-          </View>
+        <View style={styles.container}>
+          {state === 'question' && <QuestionCard onChange={changeAnswer} word={word}/>}
+          {state === 'rightAns' && <RightScreen />}
+          {state === 'wrongAns' && <WrongScreen word={word} />}
+          <Button style={styles.button} mode="contained" onPress={nextQuestion}>  Next </Button>
+          {state === 'question' && (
+            <Button style={styles.button} mode="contained" disabled={answer === ''} onPress={checkAnswer} >Check</Button>
+          )}
           <Text> Need to test {testList.length} words. </Text>
         </View>
       )}
       { word === '' && (
-        <View>
-          <Text> you finished the test. </Text>
-          <Button mode="contained" onPress={restart}> Restart </Button>
-        </View>
+        <AchivementScreen reset={restart} />
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mainView: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: 20,
-  },
-  iconView: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  icon: {
-    margin: 20,
-  },
-  button: {
-    margin: 20,
-    color: 'white', 
-  },
-});
 

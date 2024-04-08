@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, FlatList, TextInput, StyleSheet } from 'react-native';
+import { View, FlatList, TextInput} from 'react-native';
 import { Button, Card, Text, PaperProvider } from 'react-native-paper';
 import * as wordDB from '../../utils/word';
 import { WordItem } from '../../components/wordCard/wordCard';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 export const Favourite = () => {
   const [favouriteList, setFavouriteList] = React.useState([]);
   const [filterText, setFilterText] = React.useState('');
   const [filterList, setFilterList] = React.useState([]);
+
+  let styles = normalStyles;
 
   const favouriteListener = (results) => {
     console.log('Favourite listener', results.map((x) => x.word));
@@ -40,7 +43,7 @@ export const Favourite = () => {
     <PaperProvider>
       <TextInput
         placeholder="Fliter"
-        style={styles.Filter}
+        style={styles.filter}
         value={filterText}
         onChangeText={setFilterText}
         />
@@ -61,13 +64,4 @@ export const Favourite = () => {
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  Filter: {
-    height: 40,
-    borderWidth: 1,
-    margin: 10,
-    padding: 10,
-  },
-});
 
