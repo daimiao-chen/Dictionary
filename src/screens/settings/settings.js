@@ -14,6 +14,9 @@ export const Settings = () => {
     });
 
     wordDB.getNotificationTime().then((time) => {
+      if (time === null) {
+        time = 0;
+      }
       setTime(time);
     });
   }, []);
