@@ -5,6 +5,7 @@ import { Button, Text } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as wordDB from '../../utils/word';
 import { normalStyles, darkStyles } from '../../utils/style';
+import { Achievement } from '../../components/achievement/achievement';
 
 /**
  * Displayed when the user gives a wrong answer.
@@ -53,6 +54,7 @@ const AchievementScreen = ({ reset, isDark }) => {
     <View style={styles.container}>
       <Text style={styles.header}>You have finished the test.</Text>
       <Button style={styles.button} mode="contained" onPress={reset}>Restart</Button>
+      <Achievement/>
     </View>
   );
 }
