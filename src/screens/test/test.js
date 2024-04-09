@@ -1,10 +1,14 @@
 import React from 'react';
-import { QuestionCard } from '../../components/testCard/questionCard';
-import { View, StyleSheet } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import * as wordDB from '../../utils/word';
 import { normalStyles, darkStyles } from '../../utils/style';
+import { QuestionCard } from '../../components/testCard/questionCard';
+
+const { width } = Dimensions.get('window');
+
+const styles = isDark => isDark ? darkStyles : normalStyles;
 
 /**
  * Displayed when the user gives a wrong answer.
@@ -12,16 +16,16 @@ import { normalStyles, darkStyles } from '../../utils/style';
  * @param {boolean} isDark - Flag indicating the theme (dark/light).
  */
 const WrongScreen = ({ word, isDark }) => {
-  const styles = isDark ? darkStyles : normalStyles;
+  const style = styles(isDark);
   return (
-    <View style={styles.container}>
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff', justifyContent: 'center' }]}>
       <AntDesign
         name="closecircleo"
         size={48}
         color="red"
-        style={styles.iconSize}
+        style={style.iconSize}
       />
-      <Text style={styles.header}>The right Answer is: {word}</Text>
+      <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black', marginTop: 20 }]}>The right Answer is: {word}</Text>
     </View>
   );
 }
@@ -31,13 +35,13 @@ const WrongScreen = ({ word, isDark }) => {
  * @param {boolean} isDark - Flag indicating the theme (dark/light).
  */
 const RightScreen = ({ isDark }) => {
-  const styles = isDark ? darkStyles : normalStyles;
+  const style = styles(isDark);
   return (
     <AntDesign
       name="checkcircleo"
       size={48}
       color="green"
-      style={styles.iconSize}
+      style={style.iconSize}
     />
   );
 }
@@ -48,11 +52,13 @@ const RightScreen = ({ isDark }) => {
  * @param {boolean} isDark - Flag indicating the theme (dark/light).
  */
 const AchievementScreen = ({ reset, isDark }) => {
-  const styles = isDark ? darkStyles : normalStyles;
+  const style = styles(isDark);
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>You have finished the test.</Text>
-      <Button style={styles.button} mode="contained" onPress={reset}>Restart</Button>
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff' }]}>
+      <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black' }]}>You have finished the test.</Text>
+      <Button style={[style.button, { backgroundColor: isDark ? '#BB86FC' : '#525CEB', width: width - 40 }]} mode="contained" onPress={reset}>
+        <Text style={style.buttonText}>Restart</Text>
+      </Button>
     </View>
   );
 }
@@ -64,17 +70,10 @@ export const Test = () => {
   const [answer, setAnswer] = React.useState('');
   const [isDark, setIsDark] = React.useState(false);
 
-  /**
-   * Set the user's answer.
-   * @param {string} ans - The user's answer.
-   */
   const changeAnswer = (ans) => {
     setAnswer(ans);
   }
 
-  /**
-   * Check if the user's answer is correct.
-   */
   const checkAnswer = () => {
     setTestList(testList.filter((x) => x['word'] !== word));
     if (answer.toLowerCase() === word.toLowerCase()) {
@@ -86,17 +85,11 @@ export const Test = () => {
     setAnswer('');
   }
 
-  /**
-   * Move to the next question.
-   */
   const nextQuestion = () => {
     setState('question');
     changeTestWord();
   }
 
-  /**
-   * Change the current test word.
-   */
   const changeTestWord = () => {
     let newWord = testList[Math.floor(Math.random() * testList.length)];
     if (newWord === undefined) {
@@ -107,9 +100,6 @@ export const Test = () => {
     setWord(newWord['word']);
   }
 
-  /**
-   * Listener for the test.
-   */
   const testListener = () => {
     wordDB.getTestList().then((list) => {
       setTestList(list);
@@ -127,28 +117,29 @@ export const Test = () => {
     };
   }, []);
 
-  /**
-   * Restart the test.
-   */
   const restart = () => {
     testListener();
     changeTestWord();
   }
 
-  const styles = isDark ? darkStyles : normalStyles;
+  const style = styles(isDark);
 
   return (
-    <View style={styles.container}>
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff' }]}>
       {word !== '' && (
-        <View style={styles.container}>
+        <View style={style.container}>
           {state === 'question' && <QuestionCard onChange={changeAnswer} word={word} />}
           {state === 'rightAns' && <RightScreen isDark={isDark} />}
           {state === 'wrongAns' && <WrongScreen word={word} isDark={isDark} />}
-          <Button style={styles.button} mode="contained" onPress={nextQuestion}>Next</Button>
+          <Button style={[style.button, { backgroundColor: isDark ? '#BB86FC' : '#525CEB', width: width - 40 }]} mode="contained" onPress={nextQuestion}>
+            <Text style={style.buttonText}>Next</Text>
+          </Button>
           {state === 'question' && (
-            <Button style={styles.button} mode="contained" disabled={answer === ''} onPress={checkAnswer}>Check</Button>
+            <Button style={[style.button, { backgroundColor: isDark ? '#BB86FC' : '#525CEB', width: width - 40 }]} mode="contained" disabled={answer === ''} onPress={checkAnswer}>
+              <Text style={style.buttonText}>Check</Text>
+            </Button>
           )}
-          <Text>Need to test {testList.length} words.</Text>
+          <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black' }]}>Need to test {testList.length} words.</Text>
         </View>
       )}
       {word === '' && (
