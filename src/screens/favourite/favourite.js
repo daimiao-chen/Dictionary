@@ -25,6 +25,13 @@ const styles = isDark => StyleSheet.create({
     marginBottom: 10,
     backgroundColor: isDark ? '#1E1E1E' : '#F5F5F5',
     color: isDark ? '#F8EDFF' : 'black',
+    fontSize: 24,  
+    paddingLeft: 20,  
+  },
+  placeholder: {
+    color: isDark ? '#8A8A8A' : '#B0B0B0', 
+    fontSize: 24, 
+    fontWeight: 'bold',
   },
   iconSize: {
     marginBottom: 20,
@@ -93,6 +100,7 @@ export const Favourite = () => {
       <View style={style.container}>
         <TextInput
           placeholder="Filter"
+          placeholderTextColor={style.placeholder.color}
           style={style.filter}
           value={filterText}
           onChangeText={setFilterText}
