@@ -42,12 +42,14 @@ export const QuestionCard = ({ onChange, word }) => {
         style={[styles.inputText, { 
           borderColor: isDark ? '#BB86FC' : 'black', 
           color: isDark ? '#F8EDFF' : '#000000',
-          backgroundColor: isDark ? '#121212' : '#fff'
+          backgroundColor: isDark ? '#121212' : '#fff',
+          fontSize: 24,
+          paddingLeft: 10,
         }]}
         onChangeText={text => onChangeText(text)}
         value={answer}
         placeholder="Type your answer here"
-        placeholderTextColor={isDark ? '#F8EDFF' : '#000000'}
+        placeholderTextColor={isDark ? '#8A8A8A' : '#B0B0B0'} 
       />
     </View>
   );
