@@ -37,12 +37,14 @@ const WrongScreen = ({ word, isDark }) => {
 const RightScreen = ({ isDark }) => {
   const style = styles(isDark);
   return (
-    <AntDesign
-      name="checkcircleo"
-      size={48}
-      color="green"
-      style={style.iconSize}
-    />
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff', justifyContent: 'center', alignItems: 'center' }]}>
+      <AntDesign
+        name="checkcircleo"
+        size={48}
+        color="green"
+        style={style.iconSize}
+      />
+    </View>
   );
 }
 
@@ -54,8 +56,8 @@ const RightScreen = ({ isDark }) => {
 const AchievementScreen = ({ reset, isDark }) => {
   const style = styles(isDark);
   return (
-    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff' }]}>
-      <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black' }]}>You have finished the test.</Text>
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff', justifyContent: 'center', alignItems: 'center' }]}>
+      <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black', marginBottom: 20 }]}>You have finished the test.</Text>
       <Button style={[style.button, { backgroundColor: isDark ? '#BB86FC' : '#525CEB', width: width - 40 }]} mode="contained" onPress={reset}>
         <Text style={style.buttonText}>Restart</Text>
       </Button>
