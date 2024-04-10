@@ -83,6 +83,10 @@ export const normalStyles = StyleSheet.create({
     marginTop: 10,
     fontSize: 24, 
   },
+  normalText: {
+    color: 'black',
+    fontSize: 16,
+  },
 });
 
 export const darkStyles = StyleSheet.create({
@@ -173,5 +177,9 @@ export const darkStyles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     fontSize: 24, 
+  },
+  normalText: {
+    color: 'white',
+    fontSize: 16,
   },
 });

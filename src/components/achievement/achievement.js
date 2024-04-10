@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Text, View, FlatList } from 'react-native';
 import * as wordDB from '../../utils/word';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 const unlockedImages = [
   require('../../../assets/moon_slice_1.png'),
@@ -79,6 +80,8 @@ export const Achievement = () => {
   const [locked, setLocked] = React.useState([]);
   const [achievementCount, setAchievementCount] = React.useState(0);
   const [learnedCount, setLearnedCount] = React.useState(0);
+  const [darkMode, setDarkMode] = React.useState(false);
+  const [styles, setStyles] = React.useState(normalStyles);
 
   const learnedListener = (result) => {
     var tempCount = 0;
@@ -92,11 +95,21 @@ export const Achievement = () => {
 
   React.useEffect(() => {
     wordDB.registerFavouriteListener("achievement", learnedListener);
-
+    wordDB.getDarkMode().then((result) => {
+      setDarkMode(result);
+    });
     return () => {
       wordDB.unregisterFavouriteListener("achievement");
     }
   }, []);
+
+  React.useEffect(() => {
+    if (darkMode) {
+      setStyles(darkStyles);
+    } else {
+      setStyles(normalStyles);
+    }
+  }, [darkMode]);
 
   React.useEffect(() => {
     setAchievementCount(learnedCountToAchievementCount(learnedCount));
@@ -126,7 +139,7 @@ export const Achievement = () => {
         style={{ width: 60, height: 60, margin: 5 }}
         source={unlockedImages[imageId - 1]}
       />
-      <Text>{label}</Text>
+      <Text style={styles.normalText}>{label}</Text>
       </View>
     );
   }
@@ -139,7 +152,7 @@ export const Achievement = () => {
           style={{ width: 60, height: 60, margin: 5 }}
           source={lockedImages[imageId - 1]}
         />
-        <Text>{label}</Text>
+        <Text style={styles.normalText}>{label}</Text>
       </View>
     );
   }
