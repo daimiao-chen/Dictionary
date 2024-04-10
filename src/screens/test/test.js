@@ -57,7 +57,7 @@ const RightScreen = ({ isDark }) => {
 const AchievementScreen = ({ reset, isDark }) => {
   const style = styles(isDark);
   return (
-    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff', justifyContent: 'center', alignItems: 'center' }]}>
+    <View style={[style.container, { backgroundColor: isDark ? '#121212' : '#fff', justifyContent: 'center', alignItems: 'center', margin: 5 }]}>
       <Text style={[style.header, { color: isDark ? '#F8EDFF' : 'black', marginBottom: 20 }]}>You have finished the test.</Text>
       <Button style={[style.button, { backgroundColor: isDark ? '#BB86FC' : '#525CEB', width: width - 40 }]} mode="contained" onPress={reset}>
         <Text style={style.buttonText}>Restart</Text>
