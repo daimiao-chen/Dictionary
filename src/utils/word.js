@@ -2,6 +2,7 @@ import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { Audio } from 'expo-av';
+import * as Updates from 'expo-updates';
 
 let initializedCallback = [];
 let db = null;
@@ -98,6 +99,10 @@ export const closeDBandDelete = () => {
   db._db.close();
   db = null;
   FileSystem.deleteAsync(FileSystem.documentDirectory + 'SQLite');
+  /* deley 1 second and reload */
+  setTimeout(() => {
+    Updates.reloadAsync();
+  }, 1000);
 }
 
 initializeDatabase();

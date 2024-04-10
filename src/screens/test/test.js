@@ -70,7 +70,7 @@ const AchievementScreen = ({ reset, isDark }) => {
 export const Test = () => {
   const [state, setState] = React.useState('question');
   const [testList, setTestList] = React.useState([]);
-  const [word, setWord] = React.useState('English');
+  const [word, setWord] = React.useState('');
   const [answer, setAnswer] = React.useState('');
   const [isDark, setIsDark] = React.useState(false);
 
@@ -107,7 +107,6 @@ export const Test = () => {
   const testListener = () => {
     wordDB.getTestList().then((list) => {
       setTestList(list);
-      changeTestWord();
     });
   };
 
