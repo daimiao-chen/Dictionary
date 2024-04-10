@@ -56,7 +56,6 @@ export const normalStyles = StyleSheet.create({
     marginHorizontal: 10,
     paddingHorizontal: 10,
     height: 40,
-    placeholderTextColor: '#000000',
   },
   filter: {
     height: 40,
@@ -149,7 +148,6 @@ export const darkStyles = StyleSheet.create({
     marginHorizontal: 10,
     paddingHorizontal: 10,
     height: 40,
-    placeholderTextColor: '#000000',
   },
   filter: {
     height: 40,
