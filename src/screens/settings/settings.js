@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
+import Slider from '@react-native-community/slider';
 import * as wordDB from '../../utils/word';
-import { triggerNotification, NotificationSlider, cancelNotifications, getNotificationStatus, convertTimeToSeconds } from '../../components/notifications/notifications';
-import { normalStyles, darkStyles } from '../../utils/style';
+import { triggerNotification, cancelNotifications, getNotificationStatus, convertTimeToSeconds } from '../../components/notifications/notifications';
 import * as Updates from 'expo-updates';
+import { normalStyles, darkStyles } from '../../utils/style';
 
 export const Settings = () => {
   const [time, setTime] = React.useState(0);
@@ -13,7 +14,7 @@ export const Settings = () => {
   const darkButtonText = "Dark Mode";
   const lightButtonText = "Light Mode";
 
-  let styles = isDark ? darkStyles : normalStyles;
+  const styles = isDark ? darkStyles : normalStyles;
 
   React.useEffect(() => {
     wordDB.getDarkMode().then((mode) => {
@@ -57,9 +58,32 @@ export const Settings = () => {
     setIsNotification(false);
   }
 
+  const formatTime = (value) => {
+    if (value < 60) {
+      return `${value}m`;
+    } else if (value < 1440) {
+      return `${Math.floor(value / 60)}h`;
+    } else {
+      return `${Math.floor(value / 1440)}d`;
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <NotificationSlider value={time} onValueChange={setTime} />
+      <View style={styles.sliderContainer}>
+      <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={2880}
+          step={1}
+          minimumTrackTintColor={isDark ? '#BB86FC' : '#525CEB'} 
+          maximumTrackTintColor={isDark ? '#CF6679' : '#000000'}
+          thumbTintColor={isDark ? '#CF6679' : '#525CEB'}
+          value={time}
+          onValueChange={setTime}
+        />
+        <Text style={[styles.sliderText, isDark && { color: '#FFFFFF' }]}>{formatTime(time)}</Text>
+      </View>
       <Button 
         style={styles.button}
         mode="contained"
@@ -82,3 +106,4 @@ export const Settings = () => {
     </View>
   );
 }
+

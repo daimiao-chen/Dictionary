@@ -69,6 +69,20 @@ export const normalStyles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 10,
   },
+  sliderContainer: {
+    width: '80%',
+    marginBottom: 20,
+  },
+  slider: {
+    width: '100%',
+    height: 50,
+  },
+  sliderText: {
+    color: '#000000',
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 24, 
+  },
 });
 
 export const darkStyles = StyleSheet.create({
@@ -145,5 +159,19 @@ export const darkStyles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 10,
     color: '#F8EDFF',
+  },
+  sliderContainer: {
+    width: '80%',
+    marginBottom: 20,
+  },
+  slider: {
+    width: '100%',
+    height: 50,
+  },
+  sliderText: {
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 24, 
   },
 });
