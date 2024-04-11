@@ -6,11 +6,11 @@ import { Favourite } from './src/screens/favourite/favourite';
 import { Test } from './src/screens/test/test';
 import { Settings } from './src/screens/settings/settings';
 import { LogBox } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // импорт иконок
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import {MaterialCommunityIcons } from '@expo/vector-icons';
 
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
-
+LogBox.ignoreLogs(['Warning: ...']); 
+LogBox.ignoreAllLogs();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -44,7 +44,7 @@ export default function App() {
           component={Test} 
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Icon name="test" color={color} size={size} />
+              <MaterialCommunityIcons name="message-question" color={color} size={size} />
             ),
           }}
         />
