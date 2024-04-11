@@ -13,8 +13,14 @@ export const Home = () => {
   const [dailyWord, setDailyWord] = React.useState('');
   const [data, setData] = React.useState({});
   const [isDark, setIsDark] = React.useState(false);
+  const [styles, setStyles] = React.useState(normalStyles);
 
-  let styles = isDark ? darkStyles : normalStyles;
+  React.useEffect(() => {
+    wordDB.getDarkMode().then((mode) => {
+      setIsDark(mode);
+      setStyles(mode ? darkStyles : normalStyles);
+    });
+  }, []);
 
   const search = () => {
     if (searchText === '') {
@@ -80,7 +86,7 @@ export const Home = () => {
           </Modal>
         </Portal>
       </View>
-      <View>
+      <View style={isDark ? {backgroundColor: 'black' }: {backgroundColor: 'white'}}>
         <WordCard word={dailyWord} />
         <Button style={styles.button} onPress={updateDailyWord}>
           <Text style={styles.buttonText}>I WANT MORE</Text>
@@ -104,40 +110,3 @@ const darkTheme = {
   },
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
-  searchComponent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  inputText: {
-    flex: 1,
-    height: 40,
-    borderColor: '#525CEB',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    fontSize: 24,
-  },
-  iconSize: {
-    marginLeft: 10,
-    fontSize: 24,
-  },
-  button: {
-    backgroundColor: '#525CEB',
-    marginTop: 20,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-});

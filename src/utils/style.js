@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export const normalStyles = StyleSheet.create({
+  card: {
+    margin: 5,
+  },
   containerRow: {
     display: 'flex',
     flexDirection: 'row',
@@ -90,16 +93,20 @@ export const normalStyles = StyleSheet.create({
 });
 
 export const darkStyles = StyleSheet.create({
+  card: {
+    margin: 5,
+    backgroundColor: 'grey',
+  },
   containerRow: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
-    backgroundColor: '#121212',
+    backgroundColor: 'black',
   },
   container: {
     alignItems: 'center',
-    backgroundColor: '#121212',  
+    backgroundColor: 'black',  
     flex: 1,  
   },
   button: {
@@ -111,7 +118,7 @@ export const darkStyles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonText: {
-    color: '#121212',
+    color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
     textTransform: 'uppercase',
@@ -135,7 +142,7 @@ export const darkStyles = StyleSheet.create({
   },
   searchComponent: {
     flex: 1,
-    backgroundColor: '#121212',
+    backgroundColor: 'black',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,

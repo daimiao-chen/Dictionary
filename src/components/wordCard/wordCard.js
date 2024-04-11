@@ -57,13 +57,20 @@ const rightButton = ({ word, isLearnd, isLiked }) => {
 };
 
 let uuid = 0;
-export const WordCard = ({ word, isDark }) => {
+export const WordCard = ({ word }) => {
   const [subDict, setSubDict] = React.useState();
   const [phonetic, setPhonetic] = React.useState(null);
   const [item, setItem] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);
   const [isLearnd, setIsLearnd] = React.useState(false);
-  const [styles, setStyles] = React.useState(isDark ? darkStyles : normalStyles);
+  const [styles, setStyles] = React.useState(normalStyles);
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    wordDB.getDarkMode().then((dark) => {
+      setIsDark(dark);
+    });
+  }, []);
 
   const myuuid = uuid++;
 
@@ -109,10 +116,10 @@ export const WordCard = ({ word, isDark }) => {
   }, [isDark]);
 
   return (
-    <Card style={{ margin: 10, backgroundColor: isDark ? '#333333' : '#ffffff' }}>
+    <Card style={styles.card}>
       <Card.Title title={word} right={() => rightButton({ word: word, isLearnd: isLearnd, isLiked: isLiked })} />
       <Card.Content style={{ height: 400 }}>
-        <View style={styles.containerRow}>
+        <View style={{display: 'flex'}}>
           {phonetic && <Text>{phonetic.text}</Text>}
           <AntDesign
             name="sound"
@@ -144,17 +151,27 @@ export const WordCard = ({ word, isDark }) => {
 
 export const WordItem = ({ item }) => {
   const [visible, setVisible] = React.useState(false);
+  const [styles, setStyles] = React.useState(normalStyles);
+  const [isDark, setIsDark] = React.useState(false);
   const showModal = () => setVisible(true);
 
+  React.useEffect(() => {
+    wordDB.getDarkMode().then((dark) => {
+      setIsDark(dark);
+    });
+  }, []);
+  React.useEffect(() => {
+    setStyles(isDark ? darkStyles : normalStyles);
+  }, [isDark]);
   return (
-    <View style={{ marginTop: 5 }}>
+    <View>
       <Portal>
         <Modal visible={visible} onDismiss={() => { setVisible(false) }} style={{ margin: 20 }}>
           <WordCard word={item.word} />
         </Modal>
       </Portal>
 
-      <Card onPress={showModal}>
+      <Card onPress={showModal} style={styles.card}>
         <Card.Title title={item.word} subtitle={item.added_date} 
           right={() => rightButton({ word: item.word, isLearnd: item.learned !== 0, isLiked: true })} />
       </Card>
