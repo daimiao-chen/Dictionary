@@ -267,7 +267,8 @@ export const getPhonetic = (word) => {
 }
 
 export const getTestList = () => {
-  return executeSql('SELECT * FROM word_list WHERE learned = 0', [])
+  // only pick the first 10 words
+  return executeSql('SELECT * FROM word_list WHERE learned = 0 ORDER BY last_test_date ASC LIMIT 10', [])
     .then(results => {
       return results.rows._array;
     });
@@ -278,6 +279,22 @@ export const setLearned = (word) => {
     .then(() => {
       pushFavouriteChangeed();
     });
+}
+
+export const setLearnedTest = (word) => {
+  /* 1. get the word's test_times
+   * 2. increment the test_times
+   * 3. if test_times is 3, set learned to 1
+   */
+  return executeSql('SELECT * FROM word_list WHERE word = ?', [word])
+    .then(results => {
+      let testTimes = results.rows._array[0].test_times + 1;
+      if (testTimes >= 3) {
+        return executeSql('UPDATE word_list SET learned = 1, test_times = ? WHERE word = ?', [testTimes, word]);
+      } else {
+        return executeSql('UPDATE word_list SET test_times = ? WHERE word = ?', [testTimes, word]);
+      }
+    })
 }
 
 export const unsetLearned = (word) => {

@@ -81,7 +81,7 @@ export const Test = () => {
   const checkAnswer = () => {
     setTestList(testList.filter((x) => x['word'] !== word));
     if (answer.toLowerCase() === word.toLowerCase()) {
-      wordDB.setLearned(word);
+      wordDB.setLearnedTest(word);
       setState('rightAns');
     } else {
       setState('wrongAns');
@@ -111,13 +111,9 @@ export const Test = () => {
   };
 
   React.useEffect(() => {
-    wordDB.registerFavouriteListener("test", testListener);
     wordDB.getDarkMode().then((mode) => {
       setIsDark(mode);
     });
-    return () => {
-      wordDB.unregisterFavouriteListener("test");
-    };
   }, []);
 
   const restart = () => {

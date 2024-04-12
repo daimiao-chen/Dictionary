@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export const normalStyles = StyleSheet.create({
   card: {
+    backgroundColor: 'white',
     margin: 5,
   },
   containerRow: {
